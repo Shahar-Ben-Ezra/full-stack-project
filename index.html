@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <title>Petek</title>
-  <link rel="icon" type="image/png" href="/images/shopping-cart-icon.png">
-  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <link rel="icon" type="image/png" href="images/shopping-cart-icon.png">
+  <link rel="stylesheet" type="text/css" href="./css/index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
@@ -25,13 +25,11 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
   <script src="index.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
 
 </head>
 
-<body ody data-spy="scroll" data-target=".navbar" data-offset="68">
-
-
-
+<body>
   <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="#"><i class="fa fa-shopping-cart"></i> Petek</a>
@@ -42,32 +40,74 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" href="main/main.html"><i class="fa fa-fw fa-home"></i>Home</a>
+            <a class="nav-link" href="main/main.html"><i class="fa fa-fw fa-home"></i>Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link " href="/index.html"><i class="fa fa-fw fa-user"></i>Login</a>
+            <a class="nav-link active " href="index.html"><i class="fa fa-fw fa-user"></i>Login</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  <br>
+
+  <h1 style="padding-top:100px ;" class="animate__animated animate__zoomInDown top">petek</h1>
+  <h1 class="animate__animated animate__zoomInDown">now you are going to save money!!</h1>
 
 
+  <div class="container">
+    <div class="row" style="padding-top: 50px; padding-bottom: 50px;">
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <img class="card-img-top" src="images/lists.jpg" alt="">
+          <div class="card-body">
+            <h4 class="card-title">Organize</h4>
+            <p class="card-text">Manage multiple grocery lists. A shopping list can prevent impulse buying by directing
+              your focus on the stuff you really need. </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <img class="card-img-top" src="images/cart.jpg" alt="">
+          <div class="card-body">
+            <h4 class="card-title">Shop Faster</h4>
+            <p class="card-text">When you have a list of items to buy, you simply need to locate them in their
+              designated shelves instead of wandering aimlessly around the store aisles.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <img class="card-img-top" src="images/money.jpg" alt="">
+          <div class="card-body">
+            <h4 class="card-title">Save Money</h4>
+            <p class="card-text">Having a list of to-buys lets you prioritise your spending on what you really need at
+              the moment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Modals -->
   <!-- login -->
   <div class="modal fade" id="login" data-backdrop="static" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title col-sm-4" id="exampleModalCenterTitle">log in</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+        <div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h2 class="modal-title col-sm-4" id="exampleModalCenterTitle" style="padding-left: 15px;padding-top: 15px;">
+            log in</h2>
+        </div>
+        <div class="row justify-content-center">
+          <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+          <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_UDRFuD.json" background="transparent"
+            speed="1" style="width: 140px; " loop autoplay></lottie-player>
         </div>
         <form class="form-horizontal" id="signIn">
-          <div class="container pt-3">
+          <div class="container ">
             <div class="form-group ">
               <div class="row">
                 <div class="col-4 ">
@@ -111,15 +151,20 @@
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="exampleModalCenterTitle">Create an account</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+        <div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h2 class="modal-title " id="exampleModalCenterTitle" style="padding-left: 15px;padding-top: 15px;">Create an
+            account</h2>
+        </div>
+        <div class="row justify-content-center">
+          <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_AXoQyR.json" background="transparent"
+            speed="1" style="width: 200px; height: 200px;" loop autoplay></lottie-player>
         </div>
         <div class="modal-body">
           <form class="form-horizontal" id="form-register">
-            <div class="container pt-2">
+            <div class="container ">
               <div class="form-group ">
                 <div class="row">
                   <div class="col-4">
@@ -167,15 +212,20 @@
 
   <!-- password -->
 
-  <div class="modal fade" id="passwordPage" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-    aria-hidden="true">
+  <div class="modal fade" id="passwordPage" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="exampleModalCenterTitle">Create an account</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+        <div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h2 class="modal-title" id="exampleModalCenterTitle" style="padding-left: 15px;padding-top: 15px;">Create an
+            account</h2>
+        </div>
+        <div class="row justify-content-center">
+          <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_IQ2Fuq.json" background="transparent"
+            speed="1" style="width: 200px; height: 200px;" loop autoplay></lottie-player>
         </div>
         <div class="modal-body">
           <form class="form-horizontal" id="formPassword">
@@ -183,36 +233,64 @@
               <div class="form-group">
                 <div class="row">
                   <div class="col-4">
-                    <label for="password" class="col-sm-4 control-label" required>password:</label>
+                    <label for="registerpassword" class="col-sm-4 control-label" required>password:</label>
                   </div>
                   <span class="fa fa-info-sign" href="#" data-toggle="popover"
                     data-content="enter a valid password with more then 4 characters "></span>
                   <div class="col-sm-5 px-2">
-                    <input type="password" id="password" name="password" class="form-control"
+                    <input type="password" id="registerpassword" name="registerpassword" class="form-control"
                       placeholder="Enter password">
                     <span class="fa fa-info-sign" href="#" data-toggle="popover"
-                      data-content="enter a valid password with more then 4 characters "></span>
-                    <span class="fa fa-info-sign" data-toggle="popover" title="Popover title"
-                      data-content="And here's some amazing content. It's very engaging. Right?"></span>
-                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                    <span class="sr-only">Loading...</span>
-
+                      data-content="enter a valid password with more then 4 charactersssssss "></span>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-4">
+                    <label for="confirmPassword" class="col-sm-4 control-label" required>confirm password:</label>
+                  </div>
+                  <span class=" " href="#" data-toggle="popover"
+                    data-content="enter a valid password with more then 4 characters "></span>
+                  <div class="col-sm-5 px-2">
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+                      placeholder="Enter password">
+                    <span class=" " href="#" data-toggle="popover"
+                      data-content="enter a valid password with more then 4 characters "></span>
+                  </div>
+                </div>
+
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" value="Submit" class="btn btn-primary">save</button>
-            </div>
-          </form>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" value="Submit" class="btn btn-primary">save</button>
+        </div>
+        </form>
       </div>
     </div>
+  </div>
   </div>
 
 
 
 </body>
+<footer class="footer mt-auto pt-3 px-3">
+
+  <div class="row text-center">
+    <div class="col-md-4">
+      <a><i class="fa fa-map-marker"></i></a>
+      <p>Haifa, Aba hushi </p>
+    </div>
+    <div class="col-md-4">
+      <a><i class="fa fa-phone"></i></a>
+      <p style="margin-block-end: 0rem!important;">049916008</p>
+      <p>Sun - Fri, 8:00-20:00</p>
+    </div>
+    <div class="col-md-4">
+      <a><i class="fa fa-envelope"></i></a>
+      <p style="margin-block-start:0.5em !important">info@Petek.com</p>
+    </div>
+  </div>
+</footer>
 
 </html>

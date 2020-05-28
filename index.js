@@ -87,9 +87,22 @@ $(document).ready(function () {
     // password validation
     $('form#formPassword').validate({
         rules: {
-            password: {
+            registerpassword: {
                 required: true,
                 minlength: 5
+            },
+            confirmPassword: {
+                required: true,
+                minlength: 5,
+                equalTo: "#registerpassword"
+            }
+        },
+        messages:
+        {
+
+            confirmrPassword:
+            {
+                equalTo: "Please enter the same password."
             }
         },
         highlight: function (element, erroClass) {
@@ -98,6 +111,7 @@ $(document).ready(function () {
         unhighlight: function (element, erroClass) {
             $(element).closest('.form-group').removeClass('has-error');
         }
+
     });
 
     /// submit password  form

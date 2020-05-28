@@ -1,26 +1,57 @@
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: smooth;  position: relative;
 }
- body{
-    padding: 30px
-  }
-
- /* body {
-    background:url(/images/Publix_Carts.jpg) no-repeat !important;
-    padding-top:100px;
-    background-size:auto;
-  } */
  body {
-  background: url('https://source.unsplash.com/twukN12EN7c/1920x1080') no-repeat center center fixed;
+  background: url(../images/photo-1500964757637-c85e8a162699.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
   -o-background-size: cover;
 }
+@media (max-width: 500px) { 
+   #notPadding{
+    padding-left : 15px!important;
+    padding-bottom : 0px!important;
 
-  /* .navbar  {
-    background: transparent !important;
-  } */
+  }
+}
+@media (max-width: 900px) { 
+ 
+ #lottieHide{
+   display: none;
+ }
+}
+tr{
+  color:white;
+}
+
+footer {
+  background-color: gainsboro;
+  width: 100%;
+  }
+h1 { 
+  color: #b48608;
+   font-family: 'Droid serif',
+    serif; font-size: 36px;
+     font-weight: 400;
+      font-style: italic;
+       line-height: 44px;
+        margin: 0 0 12px;
+         text-align: center;
+  }
+
+  .top{
+   color: #ffffff;
+    font-family: 
+    'Raleway',sans-serif;
+     font-size: 62px; 
+     font-weight: 800; 
+     line-height: 72px;
+     margin: 0 0 24px; 
+      text-align: center; 
+      text-transform: uppercase;
+      padding-top : 100px
+ }
   
 .highlight{
     background-color: cadetblue;
@@ -53,9 +84,7 @@ html {
   .active {
     background-color: #4CAF50;
   }
-  
-  /* Add responsiveness - will automatically display the navbar vertically instead of horizontally on screens less than 500 pixels */
-  @media screen and (max-width: 500px) {
+    @media screen and (max-width: 500px) {
     .navbar a {
       float: none;
       display: block;
@@ -63,7 +92,7 @@ html {
   }
   
   #start{
-     margin-top: 30px;
+     margin-top: 80px;
   }
   #addingNewListSection{
    display:none;
@@ -72,11 +101,7 @@ html {
     display:none;
   }
 
-
-
-
-
-  * { box-sizing: border-box; }
+* { box-sizing: border-box; }
 body {
   font: 16px Arial;
 }

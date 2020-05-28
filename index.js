@@ -40,13 +40,13 @@ $(document).ready(function () {
         let user = $('#email-signIn').val();
         let pass = $('#password').val();
         if ($(this).valid()) {
-            if (user === admin.email && pass === admin.password) {
+            if (user.toLowerCase() === admin.email.toLowerCase() && pass === admin.password) {
                 e.preventDefault();
                 alert("we did it ");
                 location.href = 'main/main.html';
             }
             else {
-                alert("worng details ");
+                alert("wrong details ");
             }
         }
     });

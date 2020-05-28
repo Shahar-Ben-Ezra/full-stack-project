@@ -86,30 +86,34 @@ $(document).ready(function () {
     if (SelectedListName !== 'Choose list') {
       const table = $("#html_master");
       const productName = $('#name-of-product').val();
-      $('#name-of-product').val("");
       const amount = $('#product-amount').val();
-      $('#product-amount').val("");
       const status = "need to buy";
       const result = ListProducts.find(obj => (obj.listName === SelectedListName));
-      if (result?.products.filter(obj => (obj.productName === productName)).length) {
-        alert('you allready have this product in your current list')
+      if (amount>0) {
+        if (result?.products.filter(obj => (obj.productName.toLowerCase() === productName.toLowerCase())).length) {
+          alert('you already have this product in your current list')
 
+        } else {
+          $('#product-amount').val("");
+          $('#name-of-product').val("");
+          result?.products.unshift({ productName, amount, status, SelectedListName });// adding to the first position in the array
+          let newRow = "<tr>";
+          newRow += `<td>${productName}</td>`;
+          newRow += `<td >${amount}</td>`;
+          newRow += `<td>${status}</td>`;
+          newRow += "<td>";
+          newRow += "<button type='button' class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>";
+          newRow += "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>";
+          newRow += "</td>";
+          newRow += "</tr>";
+          table.prepend(newRow);
+          $("#name-of-product").focus();
+          alert(`you added ${productName}`);
+          $('table').show();
+          $('#emptyTable').hide();
+        }
       } else {
-        result?.products.unshift({ productName, amount, status, SelectedListName });// adding to the first position in the array
-        let newRow = "<tr>";
-        newRow += `<td>${productName}</td>`;
-        newRow += `<td >${amount}</td>`;
-        newRow += `<td>${status}</td>`;
-        newRow += "<td>";
-        newRow += "<button type='button' class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>";
-        newRow += "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>";
-        newRow += "</td>";
-        newRow += "</tr>";
-        table.prepend(newRow);
-        $("#name-of-product").focus();
-        alert(`you added ${productName}`);
-        $('table').show();
-        $('#emptyTable').hide();
+        alert('you cannot add a negative amount')
       }
     }
     else {
@@ -175,7 +179,7 @@ $(document).ready(function () {
   $("form#addNewListName").submit(function (e) {
     e.preventDefault();
     const optionValue = $('#nameOfNewList').val();
-    const flag = ProductsListName.includes(optionValue);
+    const flag = ProductsListName.includes(optionValue.toLowerCase());
     if (flag) {
       alert(`you allready have a list that called  ${optionValue}`);
 
@@ -303,42 +307,42 @@ $(document).ready(function () {
   };
 
   let productsAutoComplete = ['wheat', 'rye', 'oats', 'corn', 'barley', 'buckwheat', 'rice', 'rolls', 'buns', 'cakes', 'cookies', 'pies', 'cereal',
-  'corn flakes', 'oat flakes', 'wheat flakes', 'rice flakes', 'muesli', 'popcorn', 'pasta', 'macaroni', 'noodles', 'spaghetti', 'vermicelli',
-  'ravioli', 'dumplings', 'flour', 'dough', 'bread', 'white bread', 'whole-wheatbread', 'rye bread', 'raisin bread', 'garlic bread', 'corn bread',
-  'pita bread', 'tortilla', 'buns', 'croissant', 'bagel', 'hamburger bun', 'hot dog bun', 'cracker', 'biscuit', 'cookie', 'toast', 'pretzel', 'waffle',
-  'crouton', 'cake', 'chocolate cake', 'honey cake', 'coffee cake', 'oatmeal cookie', 'chocolate cookie', 'pie', 'apple pie', 'blueberry pie',
-  'cherry pie', 'homemade pie', 'tart', 'apple tart', 'pizza', 'muffin', 'pancake', 'meat', 'beef', 'pork', 'veal', 'lamb', 'mutton', 'beefsteak', 'roast beef',
-  'ground beef', 'hamburger', 'spare rib', 'lamb chop', 'veal cutlet', 'pastrami', 'cornedbeef', 'sausage', 'salami', 'smoked sausage', 'Bologna', 'hotdogs',
-  'chicken', 'turkey', 'eggs', 'chicken leg', 'drumstick', 'chicken wing', 'chicken breast', 'turkey breast', 'fish', 'salmon', 'trout', 'sturgeon',
-  'cod', 'tuna', 'mackerel', 'anchovy', 'mullet', 'carp', 'sardine', 'salmon steak', 'smoked fish', 'salted fish', 'milk', 'whole milk',
-  'low-fat milk', 'nonfat milk', 'pasteurized milk', 'yogurt', 'kefir', 'sourmilk', 'butter milk', 'cream', 'sour cream', 'butter',
-  'cottage cheese', 'Cheddar cheese', 'Mozzarella chesse', 'Roquefort cheese', 'blue cheese', 'ice cream', 'vanilla ice cream', 'chocolate ice cream',
-  'fruit ice', 'strawberry ice cream', 'ice-cream cone', 'popsicle', 'berries', 'dried fruit', 'nuts', 'fresh fruit', 'apple', 'pear', 'apricot', 'peach',
-  'nectarine', 'plum', 'grapes', 'cherry', 'sweetcherry', 'lemon', 'lime', 'orange', 'tangerine', 'grapefruit', 'banana', 'kiwi', 'pineapple', 'olive',
-  'fig', 'papaya', 'mango', 'avocado', 'coconut', 'persimmon', 'pomegranate', 'melon', 'watermelon', 'berry', 'berries', 'strawberry', 'raspberry',
-  'cranberry', 'blueberry', 'dried fruit', 'dried apricots', 'raisins', 'figs', 'prunes', 'dates', 'candied fruit', 'nuts', 'hazelnuts', 'walnuts',
-  'almonds', 'chestnuts', 'peanuts', 'pistachio nuts', 'cashew nuts', 'pecans', 'macadamia nuts', 'apricot pits', 'pumpkin seeds', 'sunflower seeds',
-  'raspberry jam', 'cranberry jam', 'grape jelly', 'marmalade', 'honey', 'maple syrup', 'peanut butter', 'herbs', 'vegetables', 'fresh vegetables', 'salad',
-  'vegetables', 'canned vegetables', 'leaf vegetables', 'leafy greens', 'greens', 'tomato', 'cucumber', 'carrot', 'beet', 'potato', 'onion', 'green onions',
-  'leek', 'sweet pepper', 'red pepper', 'green pepper', 'yellow pepper', 'paprika', 'hotpepper', 'chili pepper', 'cabbage', 'cauliflower', 'broccoli',
-  'Brussels sprouts', 'collard', 'kale', 'kohlrabi', 'mushrooms', 'lettuce', 'spinach', 'celery', 'asparagus', 'artichoke', 'cress', 'watercress', 'garlic',
-  'eggplant', 'aubergine', 'squash', 'gourd', 'zucchini', 'pumpkin', 'turnip', 'radish', 'pickled cucumbers', 'pickles', 'marinated cucumbers', 'sauerkraut',
-  'canned olives', 'peas', 'corn', 'green peas', 'sweet peas', 'green beans', 'lima beans', 'kidney beans', 'black beans', 'soybeans', 'lentil',
-  'corn', 'sweet corn', 'maize', 'coffee beans', 'parsley', 'basil', 'coriander', 'mint', 'fruit juice', 'beverages', 'drinks', 'applejuice',
-  'orange juice', 'grapefruit juice', 'lemon juice', 'tomato juice', 'fresh fruit juice', 'tea', 'green tea', 'black tea', 'tea with milk',
-  'iced tea', 'herbaltea', 'mint tea', 'Indian tea', 'coffee', 'instant coffee', 'espresso', 'cappuccino', 'decaffeinated coffee', 'black coffee',
-  'cocoa', 'hot chocolate', 'milk shake', 'water', 'mineral water', 'spring water', 'soft drink', 'soda water', 'lemonade', 'cider', 'ginger ale',
-  'alcoholic drinks', 'liquor', 'beer', 'ale', 'wine', 'red wine', 'white wine', 'champagne', 'vodka', 'cognac', 'brandy', 'whiskey', 'whisky',
-  'gin', 'rum', 'liqueur', 'cocktail', 'punch', 'sauces', 'salad dressings', 'vegetable oils', 'fats', 'tomato sauce', 'ketchup', 'mushroom sauce',
-  'meat sauce', 'steak sauce', 'gravy', 'spaghetti sauce', 'hot sauce', 'chili sauce', 'barbecue sauce', 'sweet-and-sour sauce', 'spicy sauce',
-  'garlic sauce', 'white sauce', 'dip sauce', 'soy sauce', 'apple sauce', 'cranberry sauce', 'mayonnaise', 'salad dressing', 'vegetable oil',
-  'olive oil', 'corn oil', 'sunflower seed oil', 'sesame oil', 'margarine', 'grease', 'fat', 'animal fat', 'vegetable fat', 'seasoning',
-  'spices', 'flavoring', 'herbs', 'seeds', 'vinegar', 'pepper', 'ground pepper', 'whole pepper', 'red pepper', 'hot pepper', 'chili pepper',
-  'salt', 'parsley', 'mint', 'coriander', 'basil', 'bay leaf', 'cloves', 'cinnamon', 'caraway', 'thyme', 'cardamom', 'tarragon', 'oregano', 'marjoram',
-  'rosemary', 'garlic', 'mustard', 'lemon peel', 'candy', 'candies', 'sweets', 'caramels', 'mint drops', 'jelly beans', 'lollipop', 'bonbons',
-  'chocolate candies', 'chocolate', 'chocolate bar', 'candy bar', 'marshmallow'];
+    'corn flakes', 'oat flakes', 'wheat flakes', 'rice flakes', 'muesli', 'popcorn', 'pasta', 'macaroni', 'noodles', 'spaghetti', 'vermicelli',
+    'ravioli', 'dumplings', 'flour', 'dough', 'bread', 'white bread', 'whole-wheatbread', 'rye bread', 'raisin bread', 'garlic bread', 'corn bread',
+    'pita bread', 'tortilla', 'buns', 'croissant', 'bagel', 'hamburger bun', 'hot dog bun', 'cracker', 'biscuit', 'cookie', 'toast', 'pretzel', 'waffle',
+    'crouton', 'cake', 'chocolate cake', 'honey cake', 'coffee cake', 'oatmeal cookie', 'chocolate cookie', 'pie', 'apple pie', 'blueberry pie',
+    'cherry pie', 'homemade pie', 'tart', 'apple tart', 'pizza', 'muffin', 'pancake', 'meat', 'beef', 'pork', 'veal', 'lamb', 'mutton', 'beefsteak', 'roast beef',
+    'ground beef', 'hamburger', 'spare rib', 'lamb chop', 'veal cutlet', 'pastrami', 'cornedbeef', 'sausage', 'salami', 'smoked sausage', 'Bologna', 'hotdogs',
+    'chicken', 'turkey', 'eggs', 'chicken leg', 'drumstick', 'chicken wing', 'chicken breast', 'turkey breast', 'fish', 'salmon', 'trout', 'sturgeon',
+    'cod', 'tuna', 'mackerel', 'anchovy', 'mullet', 'carp', 'sardine', 'salmon steak', 'smoked fish', 'salted fish', 'milk', 'whole milk',
+    'low-fat milk', 'nonfat milk', 'pasteurized milk', 'yogurt', 'kefir', 'sourmilk', 'butter milk', 'cream', 'sour cream', 'butter',
+    'cottage cheese', 'Cheddar cheese', 'Mozzarella chesse', 'Roquefort cheese', 'blue cheese', 'ice cream', 'vanilla ice cream', 'chocolate ice cream',
+    'fruit ice', 'strawberry ice cream', 'ice-cream cone', 'popsicle', 'berries', 'dried fruit', 'nuts', 'fresh fruit', 'apple', 'pear', 'apricot', 'peach',
+    'nectarine', 'plum', 'grapes', 'cherry', 'sweetcherry', 'lemon', 'lime', 'orange', 'tangerine', 'grapefruit', 'banana', 'kiwi', 'pineapple', 'olive',
+    'fig', 'papaya', 'mango', 'avocado', 'coconut', 'persimmon', 'pomegranate', 'melon', 'watermelon', 'berry', 'berries', 'strawberry', 'raspberry',
+    'cranberry', 'blueberry', 'dried fruit', 'dried apricots', 'raisins', 'figs', 'prunes', 'dates', 'candied fruit', 'nuts', 'hazelnuts', 'walnuts',
+    'almonds', 'chestnuts', 'peanuts', 'pistachio nuts', 'cashew nuts', 'pecans', 'macadamia nuts', 'apricot pits', 'pumpkin seeds', 'sunflower seeds',
+    'raspberry jam', 'cranberry jam', 'grape jelly', 'marmalade', 'honey', 'maple syrup', 'peanut butter', 'herbs', 'vegetables', 'fresh vegetables', 'salad',
+    'vegetables', 'canned vegetables', 'leaf vegetables', 'leafy greens', 'greens', 'tomato', 'cucumber', 'carrot', 'beet', 'potato', 'onion', 'green onions',
+    'leek', 'sweet pepper', 'red pepper', 'green pepper', 'yellow pepper', 'paprika', 'hotpepper', 'chili pepper', 'cabbage', 'cauliflower', 'broccoli',
+    'Brussels sprouts', 'collard', 'kale', 'kohlrabi', 'mushrooms', 'lettuce', 'spinach', 'celery', 'asparagus', 'artichoke', 'cress', 'watercress', 'garlic',
+    'eggplant', 'aubergine', 'squash', 'gourd', 'zucchini', 'pumpkin', 'turnip', 'radish', 'pickled cucumbers', 'pickles', 'marinated cucumbers', 'sauerkraut',
+    'canned olives', 'peas', 'corn', 'green peas', 'sweet peas', 'green beans', 'lima beans', 'kidney beans', 'black beans', 'soybeans', 'lentil',
+    'corn', 'sweet corn', 'maize', 'coffee beans', 'parsley', 'basil', 'coriander', 'mint', 'fruit juice', 'beverages', 'drinks', 'applejuice',
+    'orange juice', 'grapefruit juice', 'lemon juice', 'tomato juice', 'fresh fruit juice', 'tea', 'green tea', 'black tea', 'tea with milk',
+    'iced tea', 'herbaltea', 'mint tea', 'Indian tea', 'coffee', 'instant coffee', 'espresso', 'cappuccino', 'decaffeinated coffee', 'black coffee',
+    'cocoa', 'hot chocolate', 'milk shake', 'water', 'mineral water', 'spring water', 'soft drink', 'soda water', 'lemonade', 'cider', 'ginger ale',
+    'alcoholic drinks', 'liquor', 'beer', 'ale', 'wine', 'red wine', 'white wine', 'champagne', 'vodka', 'cognac', 'brandy', 'whiskey', 'whisky',
+    'gin', 'rum', 'liqueur', 'cocktail', 'punch', 'sauces', 'salad dressings', 'vegetable oils', 'fats', 'tomato sauce', 'ketchup', 'mushroom sauce',
+    'meat sauce', 'steak sauce', 'gravy', 'spaghetti sauce', 'hot sauce', 'chili sauce', 'barbecue sauce', 'sweet-and-sour sauce', 'spicy sauce',
+    'garlic sauce', 'white sauce', 'dip sauce', 'soy sauce', 'apple sauce', 'cranberry sauce', 'mayonnaise', 'salad dressing', 'vegetable oil',
+    'olive oil', 'corn oil', 'sunflower seed oil', 'sesame oil', 'margarine', 'grease', 'fat', 'animal fat', 'vegetable fat', 'seasoning',
+    'spices', 'flavoring', 'herbs', 'seeds', 'vinegar', 'pepper', 'ground pepper', 'whole pepper', 'red pepper', 'hot pepper', 'chili pepper',
+    'salt', 'parsley', 'mint', 'coriander', 'basil', 'bay leaf', 'cloves', 'cinnamon', 'caraway', 'thyme', 'cardamom', 'tarragon', 'oregano', 'marjoram',
+    'rosemary', 'garlic', 'mustard', 'lemon peel', 'candy', 'candies', 'sweets', 'caramels', 'mint drops', 'jelly beans', 'lollipop', 'bonbons',
+    'chocolate candies', 'chocolate', 'chocolate bar', 'candy bar', 'marshmallow'];
 
- 
+
   autocomplete(document.getElementById("name-of-product"), productsAutoComplete);
 
 });

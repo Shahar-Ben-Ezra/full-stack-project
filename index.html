@@ -89,6 +89,7 @@
     </div>
   </div>
   <!-- Modals -->
+
   <!-- login -->
   <div class="modal fade" id="login" data-backdrop="static" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -98,41 +99,36 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h2 class="modal-title col-sm-4" id="exampleModalCenterTitle" style="padding-left: 15px;padding-top: 15px;">
+          <h2 class="modal-title col-sm-4" style="padding-left: 15px;padding-top: 15px;">
             log in</h2>
         </div>
         <div class="row justify-content-center">
           <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
           <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_UDRFuD.json" background="transparent"
-            speed="1" style="width: 140px; " loop autoplay></lottie-player>
+            speed="1" style="width: 140px;" loop autoplay></lottie-player>
         </div>
         <form class="form-horizontal" id="signIn">
-          <div class="container ">
-            <div class="form-group ">
-              <div class="row">
-                <div class="col-4 ">
-                  <label for="email" class="control-label col-sm-4">Email:</label>
-                </div>
-                <div class="col-sm-5 px-2">
-                  <input type="text" id="email-signIn" name="email" class="form-control" placeholder="Enter email"
-                    required>
-                </div>
+          <div style="padding-left: 20px;">
+            <div class="row">
+              <div class="col-3 col-sm-4 marginSpace">
+                <label for="email" class="control-label">Email:</label>
               </div>
-
+              <div class="col-8 col-sm-5">
+                <input type="text" id="email-signIn" name="email" class="form-control" placeholder="Enter email"
+                  required>
+              </div>
             </div>
-          </div>
-          <div class="container pt-2  ">
-            <div class="form-group ">
-              <div class="row">
-                <div class="col-4">
-                  <label for="password" class="col-sm-4 control-label ">Password:</label>
-                </div>
-                <div class="col-sm-5 px-2">
-                  <input type="password" id="password" name="password" class="  form-control"
-                    placeholder="Enter password" required>
+            <div class="row">
+              <div class="col-3 col-sm-4 marginSpace">
+                <label for="password" class=" control-label ">Password:</label>
+              </div>
+              <div class="col-8 col-sm-5" style="padding-top: 10px;">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password"
+                  required>
+                <div class="row" style="margin-left : 0px!important; margin-right: 0px!important; padding-left: 10px;">
+                  <p>Forget Password?</p>
                 </div>
               </div>
-              <center><a class=" col-sm-6">Forget Password?</a></center>
             </div>
           </div>
           <center class="newAccount"><a href="" style="font-size:20px; color:black;" data-toggle="modal">Need an
@@ -145,7 +141,7 @@
       </div>
     </div>
   </div>
-  </div>
+
   <!-- register -->
   <div class="modal fade" id="register" data-backdrop="static" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -155,7 +151,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h2 class="modal-title " id="exampleModalCenterTitle" style="padding-left: 15px;padding-top: 15px;">Create an
+          <h2 class="modal-title" style="padding-left: 15px;padding-top: 15px;">Create an
             account</h2>
         </div>
         <div class="row justify-content-center">
@@ -164,39 +160,29 @@
         </div>
         <div class="modal-body">
           <form class="form-horizontal" id="form-register">
-            <div class="container ">
-              <div class="form-group ">
-                <div class="row">
-                  <div class="col-4">
-                    <label for="email" class="col-sm-4 control-label">Email:</label>
-                  </div>
-                  <div class="col-sm-5 px-2">
-                    <input type="text" id="email" name="email" class="form-control " placeholder="Enter email" required>
-                  </div>
+            <div style="padding-left: 20px;">
+              <div class="row">
+                <div class="col-4">
+                  <label for="email" class="col-sm-4 control-label">Email:</label>
+                </div>
+                <div class="col-8 col-sm-5">
+                  <input type="text" id="email" name="email" class="form-control " placeholder="Enter email" required>
                 </div>
               </div>
-            </div>
-            <div class="container ">
-              <div class="form-group">
-                <div class="row">
-                  <div class="col-4">
-                    <label for="nickname" class="col-sm-4 control-label">nickname:</label>
-                  </div>
-                  <div class="col-sm-5 px-2">
-                    <input type="text" id="nickname" name="nickname" class="form-control" placeholder="Enter nickname">
-                  </div>
+              <div class="row">
+                <div class="col-4">
+                  <label for="nickname" class="col-sm-4 control-label">nickname:</label>
+                </div>
+                <div class="col-8 col-sm-5" style="padding-top: 10px;">
+                  <input type="text" id="nickname" name="nickname" class="form-control" placeholder="Enter nickname">
                 </div>
               </div>
-            </div>
-            <div class="container">
-              <div class="form-group">
-                <div class="row">
-                  <div class="col-4">
-                    <label for="phone" class="col-sm-4 control-label">phone:</label>
-                  </div>
-                  <div class="col-sm-5 px-2">
-                    <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter phone number">
-                  </div>
+              <div class="row">
+                <div class="col-4">
+                  <label for="phone" class="col-sm-4 control-label">phone:</label>
+                </div>
+                <div class="col-8 col-sm-5" style="padding-top: 10px; padding-bottom: 10px;">
+                  <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter phone number">
                 </div>
               </div>
             </div>
@@ -220,7 +206,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h2 class="modal-title" id="exampleModalCenterTitle" style="padding-left: 15px;padding-top: 15px;">Create an
+          <h2 class="modal-title" style="padding-left: 15px;padding-top: 15px;">Create an
             account</h2>
         </div>
         <div class="row justify-content-center">
@@ -229,49 +215,35 @@
         </div>
         <div class="modal-body">
           <form class="form-horizontal" id="formPassword">
-            <div class="container">
-              <div class="form-group">
-                <div class="row">
-                  <div class="col-4">
-                    <label for="registerpassword" class="col-sm-4 control-label" required>password:</label>
-                  </div>
-                  <span class="fa fa-info-sign" href="#" data-toggle="popover"
-                    data-content="enter a valid password with more then 4 characters "></span>
-                  <div class="col-sm-5 px-2">
-                    <input type="password" id="registerpassword" name="registerpassword" class="form-control"
-                      placeholder="Enter password">
-                    <span class="fa fa-info-sign" href="#" data-toggle="popover"
-                      data-content="enter a valid password with more then 4 charactersssssss "></span>
-                  </div>
+            <div style="padding-left: 20px;">
+              <div class="row">
+                <div class="col-3 col-sm-4">
+                  <label for="registerpassword" class="control-label" required>password:</label>
                 </div>
-                <div class="row">
-                  <div class="col-4">
-                    <label for="confirmPassword" class="col-sm-4 control-label" required>confirm password:</label>
-                  </div>
-                  <span class=" " href="#" data-toggle="popover"
-                    data-content="enter a valid password with more then 4 characters "></span>
-                  <div class="col-sm-5 px-2">
-                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                      placeholder="Enter password">
-                    <span class=" " href="#" data-toggle="popover"
-                      data-content="enter a valid password with more then 4 characters "></span>
-                  </div>
+                <div class="col-8 col-sm-5">
+                  <input type="password" id="registerpassword" name="registerpassword" class="form-control"
+                    placeholder="Enter password">
                 </div>
-
+              </div>
+              <div class="row">
+                <div class="col-3 col-sm-4">
+                  <label for="confirmPassword" class="control-label" required>confirm:</label>
+                </div>
+                <div class="col-8 col-sm-5" style="padding-top: 10px; padding-bottom: 10px;">
+                  <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+                    placeholder="Enter password">
+                </div>
               </div>
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" value="Submit" class="btn btn-primary">save</button>
+            </div>
+          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" value="Submit" class="btn btn-primary">save</button>
-        </div>
-        </form>
       </div>
     </div>
   </div>
-  </div>
-
-
 
 </body>
 <footer class="footer mt-auto pt-3 px-3">

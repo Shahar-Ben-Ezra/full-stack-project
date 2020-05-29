@@ -3,10 +3,17 @@ const admin = {
     password: "12345"
 };
 $(document).ready(function () {
-    $('[data-toggle="popover"]').popover();
-    $('#login').modal({
-        keyboard: false
-    });
+
+    if (localStorage.getItem("emailPass") !== 'A1234567') {
+        $('#loginHref').show();
+        $('#listsHref').hide();
+        $('#logout').hide();
+
+    } else {
+        $('#loginHref').hide();
+        $('#listsHref').show();
+        $('#logout').show();
+    }
 
     // clicking to create new account
     $(".newAccount").click(function () {
@@ -44,8 +51,8 @@ $(document).ready(function () {
                 e.preventDefault();
                 alert("we did it ");
                 location.href = 'main/main.html';
-            }
-            else {
+                localStorage.setItem("emailPass", 'A1234567');
+            } else {
                 alert("wrong details ");
             }
         }
@@ -97,11 +104,9 @@ $(document).ready(function () {
                 equalTo: "#registerpassword"
             }
         },
-        messages:
-        {
+        messages: {
 
-            confirmrPassword:
-            {
+            confirmrPassword: {
                 equalTo: "Please enter the same password."
             }
         },
@@ -122,4 +127,11 @@ $(document).ready(function () {
             $("#passwordPage").modal('hide');
         }
     });
+
+    /// logout
+    $("#logountBtn").on("click", function () {
+        location.href = 'index.html';
+        localStorage.setItem("emailPass", 'a');
+    });
+
 });

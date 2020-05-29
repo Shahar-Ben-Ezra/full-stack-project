@@ -1,144 +1,138 @@
 html {
-  scroll-behavior: smooth;  position: relative;
+    scroll-behavior: smooth;
+    height: 100%;
 }
- body {
-  background: url(../images/photo-1500964757637-c85e8a162699.jpg) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  -o-background-size: cover;
-}
-@media (max-width: 500px) { 
-   #notPadding{
-    padding-left : 15px!important;
-    padding-bottom : 0px!important;
 
-  }
+body {
+    background: url(../images/photo-1500964757637-c85e8a162699.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    min-height: 100%;
+    display: grid;
 }
-@media (min-width: 500px) { 
- .marginSpace{
-   padding-left: 40px!important;
- }
+
+@media (max-width: 500px) {
+    #notPadding {
+        padding-left: 15px!important;
+        padding-bottom: 0px!important;
+    }
 }
-@media (max-width: 900px) { 
- 
- #lottieHide{
-   display: none;
- }
+
+@media (min-width: 500px) {
+    .marginSpace {
+        padding-left: 40px!important;
+    }
 }
-tr{
-  color:white;
+
+@media (max-width: 900px) {
+    #lottieHide {
+        display: none;
+    }
+}
+
+tr {
+    color: white;
 }
 
 footer {
-  background-color: gainsboro;
-  width: 100%;
-  }
-h1 { 
-  color: #b48608;
-   font-family: 'Droid serif',
-    serif; font-size: 36px;
-     font-weight: 400;
-      font-style: italic;
-       line-height: 44px;
-        margin: 0 0 12px;
-         text-align: center;
-  }
+    background-color: gainsboro;
+    width: 100%;
+}
 
-  .top{
-   color: #ffffff;
-    font-family: 
-    'Raleway',sans-serif;
-     font-size: 62px; 
-     font-weight: 800; 
-     line-height: 72px;
-     margin: 0 0 24px; 
-      text-align: center; 
-      text-transform: uppercase;
-      padding-top : 100px
- }
-  
-.highlight{
+h1 {
+    color: #b48608;
+    font-family: 'Droid serif', serif;
+    font-size: 36px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 44px;
+    margin: 0 0 12px;
+    text-align: center;
+}
+
+.top {
+    color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+    font-size: 62px;
+    font-weight: 800;
+    line-height: 72px;
+    margin: 0 0 24px;
+    text-align: center;
+    text-transform: uppercase;
+    padding-top: 100px
+}
+
+.highlight {
     background-color: cadetblue;
 }
-.error{
+
+.error {
     color: red;
-} 
+}
+
 .navbar {
     width: 100%;
     background-color: #555;
     overflow: auto;
-  }
-  
-  /* Navbar links */
-  .navbar a {
+}
+
+/* Navbar links */
+
+.navbar a {
     float: left;
     text-align: center;
     padding: 12px;
     color: white;
     text-decoration: none;
     font-size: 17px;
-  }
-  
-  /* Navbar links on mouse-over */
-  .navbar a:hover {
-    background-color: #4CAF50;
-  }
-  
-  /* Current/active navbar link */
-  .active {
-    background-color: #4CAF50;
-  }
-    @media screen and (max-width: 500px) {
-    .navbar a {
-      float: none;
-      display: block;
-    }
-  }
-  
-  #start{
-     margin-top: 80px;
-  }
-  #addingNewListSection{
-   display:none;
-  }
-  .alert{
-    display:none;
-  }
+}
 
-* { box-sizing: border-box; }
+/* Navbar links on mouse-over */
+
+.navbar a:hover {
+    background-color: #4CAF50;
+}
+
+/* Current/active navbar link */
+
+.active {
+    background-color: #4CAF50;
+}
+
+@media screen and (max-width: 500px) {
+    .navbar a {
+        float: none;
+        display: block;
+    }
+}
+
+#start {
+    margin-top: 80px;
+}
+
+#addingNewListSection {
+    display: none;
+}
+
+.alert {
+    display: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-  font: 16px Arial;
+    font: 16px Arial;
 }
-.autocomplete {
-  /*the container must be positioned relative:*/
-  position: relative;
-  display: inline-block;
-}
- 
-.autocomplete-items {
-  position: absolute;
-  border: 1px solid #d4d4d4;
-  border-bottom: none;
-  border-top: none;
-  z-index: 99;
-  /*position the autocomplete items to be the same width as the container:*/
-  top: 100%;
-  left: 0;
-  right: 0;
-}
-.autocomplete-items div {
-  padding: 10px;
-  cursor: pointer;
-  background-color: #fff;
-  border-bottom: 1px solid #d4d4d4;
-}
-.autocomplete-items div:hover {
-  /*when hovering an item:*/
-  background-color: #e9e9e9;
-}
-.autocomplete-active {
-  /*when navigating through the items using the arrow keys:*/
-  background-color: DodgerBlue !important;
-  color: #ffffff;
+
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+    z-index: 1000 !important;
 }

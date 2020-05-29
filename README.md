@@ -1,2 +1,5 @@
-# full-stack-project
-full stack project including html ,css jquery ,javaScript,PHP, sql
+# README
+The mail and the password for log-in are:
+>    email: "iS@gmail.com" 
+     password: "12345"
+---

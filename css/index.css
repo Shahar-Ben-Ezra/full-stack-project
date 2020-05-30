@@ -129,10 +129,10 @@ body {
 }
 
 .ui-autocomplete {
-    max-height: 200px;
+    max-height: 80px;
     overflow-y: auto;
     /* prevent horizontal scrollbar */
     overflow-x: hidden;
     /* add padding to account for vertical scrollbar */
-    z-index: 1000 !important;
+    z-index: 5000 !important;
 }

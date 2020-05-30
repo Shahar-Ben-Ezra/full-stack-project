@@ -48,6 +48,7 @@
             </div>
         </div>
     </nav>
+
     <!-- lists && add product && add list -->
     <div class="container pt-3" id="start">
         <div class="row">
@@ -69,20 +70,9 @@
                         </form>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="container py-2 col 12">
-                        <form class="form-inline" id="addProduct" autocomplete="off">
-                            <label for="name-of-product">product name:</label>
-                            <div class="autocomplete">
-                                <input type="text" class=" mx-3 mb-2 mr-sm-2 " id="name-of-product" required>
-                            </div>
-                            <label for="product-amount">amount:</label>
-                            <input type="number" class=" mx-3 mb-2 mr-sm-2" style=" width:100px;" id="product-amount"
-                                required>
-                            <input type="submit" value="add" class="btn btn-primary mx-3 mx-md-0 mb-2" />
-                        </form>
-                    </div>
-                </div>
+                <button type="button" data-toggle="modal" data-target="#addingProductModal" class="btn btn-primary">Add
+                    New
+                    product</button>
             </div>
 
             <div class="col-12 col-sm-1" id="lottieHide">
@@ -92,6 +82,8 @@
             </div>
         </div>
     </div>
+
+
     <!-- table -->
     <div class="container" id="notPadding">
         <div class="row">
@@ -124,7 +116,7 @@
     <!--log out modal -->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">logout</h5>
@@ -142,23 +134,42 @@
             </div>
         </div>
     </div>
-    <!--deleting product modal -->
-    <div class="modal fade" id="deletingProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <!--adding product modal -->
+    <div class="modal fade" id="addingProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">delete product</h5>
+                    <h5 class="modal-title">add product</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>do you want to delete this product?</p>
+                    <form id="addProduct" autocomplete="off">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="name-of-product">product name:</label>
+                                <div class="autocomplete row">
+                                    <input type="text" class=" mx-3 mb-2 mr-sm-2 " id="name-of-product" style=" width:170px;" required>
+                                </div>
+                            </div>
+                            <div class="col-6"style="padding-left: 30px;">
+                                <label for="product-amount">amount:</label>
+                                <div class="row">
+                                    <input type="number" class=" mx-3 mb-2 mr-sm-2" style=" width:100px;"
+                                        id="product-amount" required>
+                                </div>
+                            </div>
+                            <input type="submit" value="add"
+                                class="btn btn-primary mx-3 mx-md-0 mb-2 btnSubmit d-none" />
+                        </div>
+                    </form>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="deleteProductBtn" class="btn btn-primary">yes</button>
+                    <button type="button" id="addProductBtn" class="btn btn-primary">add</button>
                 </div>
             </div>
         </div>

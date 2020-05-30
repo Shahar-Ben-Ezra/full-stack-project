@@ -80,6 +80,9 @@ $(document).ready(function () {
 
 
   };
+  $("#addProductBtn").click(function () {
+    $("form#addProduct .btnSubmit").click();
+})
   // adding new product to the list and to the table
   //ListProducts
   $("form#addProduct").submit(function (e) {
@@ -113,6 +116,8 @@ $(document).ready(function () {
           alert(`you added ${productName}`);
           $('table').show();
           $('#emptyTable').hide();
+          $('#addingProductModal').modal('hide');
+          
         }
       } else {
         alert('you cannot add a negative amount')
@@ -143,15 +148,16 @@ $(document).ready(function () {
     }
   });
 
-  function alartModal() {
+  function alertModal() {
     const name = $(staticRow.find('td')[0]).text();
     $('#deletingProductModal').find('.modal-body').text(`do you want to delete ${name} ?`)
 
-    $('#deletingProductModal').modal('toggle')
+    $('#deletingProductModal').modal('show')
   }
 
   let staticRow;
 
+  // do it on click just if its dynamic 
   $(document).on("click", '#deleteProductBtn', function () {
     const name = $(staticRow.find('td')[0]).text();
     const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
@@ -176,7 +182,7 @@ $(document).ready(function () {
   $(document).on("click", '.my-button-delete', function () {
     const row = $(this).closest('tr');
     staticRow = row;
-    alartModal();
+    alertModal();
 
   });
   // hover on the table 
@@ -259,7 +265,7 @@ $(document).ready(function () {
       'garlic sauce', 'white sauce', 'dip sauce', 'soy sauce', 'apple sauce', 'cranberry sauce', 'mayonnaise', 'salad dressing', 'vegetable oil',
       'olive oil', 'corn oil', 'sunflower seed oil', 'sesame oil', 'margarine', 'grease', 'fat', 'animal fat', 'vegetable fat', 'seasoning',
       'spices', 'flavoring', 'herbs', 'seeds', 'vinegar', 'pepper', 'ground pepper', 'whole pepper', 'red pepper', 'hot pepper', 'chili pepper',
-      'salt', 'parsley', 'mint', 'coriander', 'basil', 'bay leaf', 'cloves', 'cinnamon', 'caraway', 'thyme', 'cardamom', 'tarragon', 'oregano', 'marjoram',
+      'salt', 'parsley', 'mint', 'coriander', 'bay leaf', 'cloves', 'cinnamon', 'caraway', 'thyme', 'cardamom', 'tarragon', 'oregano', 'marjoram',
       'rosemary', 'garlic', 'mustard', 'lemon peel', 'candy', 'candies', 'sweets', 'caramels', 'mint drops', 'jelly beans', 'lollipop', 'bonbons',
       'chocolate candies', 'chocolate', 'chocolate bar', 'candy bar', 'marshmallow'];
 

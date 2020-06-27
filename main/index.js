@@ -1,23 +1,24 @@
-const admin = {
+var admin = {
     email: "iS@gmail.com",
     password: "12345"
 };
+let user;
 $(document).ready(function () {
-
-    if (localStorage.getItem("emailPass") !== 'A1234567') {
-        $('#loginHref').show();
-        $('#listsHref').hide();
-        $('#logout').hide();
-
+let x=  $('#session_something').val();
+    if ( !$('#session_something').val()) {
+        $('#loginNav').show();
+        $("#logoutNav").css("visibility", "hidden")
+        $("#listsNav").css("visibility", "hidden")
+      
     } else {
-        $('#loginHref').hide();
-        $('#listsHref').show();
-        $('#logout').show();
-    }
+        $('#loginNav').hide();
+        $("#logoutNav").css("visibility", "visible")
+        $("#listsNav").css("visibility", "visible")
+     }
 
     // clicking to create new account
     $(".newAccount").click(function () {
-        $("#login").modal('hide');
+        $("#loginModal").modal('hide');
         $("#register").modal('show');
     });
 
@@ -41,22 +42,7 @@ $(document).ready(function () {
         }
     });
 
-    /// submit sign-in form
-    $("form#signIn").submit(function (e) {
-        e.preventDefault();
-        let user = $('#email-signIn').val();
-        let pass = $('#password').val();
-        if ($(this).valid()) {
-            if (user.toLowerCase() === admin.email.toLowerCase() && pass === admin.password) {
-                e.preventDefault();
-                alert("we did it ");
-                location.href = 'main/main.html';
-                localStorage.setItem("emailPass", 'A1234567');
-            } else {
-                alert("wrong details ");
-            }
-        }
-    });
+  
 
     // cusror -email input
     $(document).on(' mouseenter mouseleave', '#email', function () {
@@ -84,8 +70,14 @@ $(document).ready(function () {
     $('form#form-register').submit(function (event) {
         if ($(this).valid()) {
             event.preventDefault();
-            alert("success");
-            $("#register").modal('hide');
+            const email = $('#email').val();
+            const nickname = $('#nickname').val();
+            const phone = $('#phone').val();
+            user={email
+                ,nickname
+                ,phone
+                };
+             $("#register").modal('hide');
             $("#passwordPage").modal('show');
 
         }
@@ -123,15 +115,17 @@ $(document).ready(function () {
     $('form#formPassword').submit(function (event) {
         if ($(this).valid()) {
             event.preventDefault();
+            const confirmPassword = $('#confirmPassword').val();
             alert("success");
-            $("#passwordPage").modal('hide');
+            $("#passwordPage").modal('hide');email
+            location.href =`insertUser.php?confirmPassword=${confirmPassword}&email=${user.email}&nickname=${user.nickname}&phone=${user.phone} `;
+
         }
     });
 
     /// logout
     $("#logountBtn").on("click", function () {
-        location.href = 'index.html';
-        localStorage.setItem("emailPass", 'a');
-    });
+        location.href = 'logout.php';
+     });
 
 });

@@ -30,158 +30,190 @@ let ListProducts = [{
 ];
 
 $(document).ready(function () {
-  $('table').hide();
-  $('#emptyTable').show();
+  // $('table').hide();
+  // $('#emptyTable').show()
+  $('#listsNav').show();
+  $('#loginNav').hide();
+  $("#logoutNav").css("visibility", "visible")
+  $("#listsNav").css("visibility", "visible")
 
   $("#logountBtn").on("click", function () {
-    location.href = '../index.html';
-    localStorage.setItem("emailPass", 'a');
+    location.href = 'logout.php';
   });
-  // when the user selected list
-  $("#selectedOptions").change(function () {
-    const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
-    const obj = ListProducts.find(obj => (obj.listName === SelectedListName));
-    if (obj?.products) {
-      setTableInfo(obj.products)
-    } else {
-      $('table tbody').empty();
-      $('table').hide();
-      $('#emptyTable').show();
+   // when the user selected list
+    $("#selectedOptions").change(function () {
+    let SelectedListId = $('#selectedOptions').find(":selected").data('id');
+    // window.location.href = 'showProducts.php?id='+SelectedListName;
+    $.ajax({
+      url:"../api/getProducts.php",
+      type:"POST",
+      data:({id:SelectedListId}),
+      success:function(data){
+        console.log(data)
+          // $("table#customers tbody").html("");
+          for (item of data ){
+              product = {"productname":item['Productname'],"amount":item['amount'],"statusProduct":item['statusProduct'], "id" :item['id']}
+              addProductToTable(product);
+          }
+        },
+        error:function(err){
+            console.log(err);
+        }
+  }) 
+    // const obj = ListProducts.find(obj => (obj.listName === SelectedListName));
+    // if (obj?.products) {
+    //   setTableInfo(obj.products)
+    // } else {
+    //   $('table tbody').empty();
+    //   $('table').hide();
+    //   $('#emptyTable').show();
 
-    }
+    // }
   });
-
+  function addProductToTable(product) {
+ 
+    let tr = `<tr data-id=${product.id}>
+        <td class="productname">${product.productname}</td>
+        <td class="amount">${product.amount}</td>
+        <td class=""statusProduct">${product.statusProduct}</td>
+        <td>
+          <button type='button' onclick="window.location.href='update.php?id=<?php echo $row['id'] ?>&&statusProduct=<?= $row['statusProduct']; ?>'" class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>
+          <button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>
+        </td>
+    </tr>`;
+    $("table#products tbody").append(tr);
+}
 
   // set table to selected list
-  function setTableInfo(products) {
-    if (products.length) {
-      $('#emptyTable').hide();
-      const table = $("#html_master");
-      $('table tbody').empty();
-      $('table').show();
-      products.forEach(function (product) {
-        let newRow = product.status === "bought" ? "<tr style='text-decoration: line-through ; color:red;'>" : "<tr>";
-        newRow += `<td>${product.productName}</td>`;
-        newRow += `<td >${product.amount}</td>`;
-        newRow += `<td>${product.status}</td>`;
-        newRow += "<td>";
-        newRow += "<button type='button' class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>";
-        newRow += product.status === "bought" ? "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete' disabled='true' ><i class='fa fa-trash'></i></button>" : "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>";
-        newRow += "</td>";
-        newRow += "</tr>";
-        table.append(newRow);
-      });
-    } else {
-      $('table tbody').empty();
-      $('table').hide();
-      $('#emptyTable').show();
+  // function setTableInfo(products) {
+  //   if (products.length) {
+  //     $('#emptyTable').hide();
+  //     const table = $("#html_master");
+  //     $('table tbody').empty();
+  //     $('table').show();
+  //     products.forEach(function (product) {
+  //       let newRow = product.status === "bought" ? "<tr style='text-decoration: line-through ; color:red;'>" : "<tr>";
+  //       newRow += `<td>${product.productName}</td>`;
+  //       newRow += `<td >${product.amount}</td>`;
+  //       newRow += `<td>${product.status}</td>`;
+  //       newRow += "<td>";
+  //       newRow += "<button type='button' class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>";
+  //       newRow += product.status === "bought" ? "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete' disabled='true' ><i class='fa fa-trash'></i></button>" : "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>";
+  //       newRow += "</td>";
+  //       newRow += "</tr>";
+  //       table.append(newRow);
+  //     });
+  //   } else {
+  //     $('table tbody').empty();
+  //     $('table').hide();
+  //     $('#emptyTable').show();
 
-    }
+  //   }
 
 
-  };
+  // };
   $("#addProductBtn").click(function () {
     $("form#addProduct .btnSubmit").click();
 })
   // adding new product to the list and to the table
   //ListProducts
-  $("form#addProduct").submit(function (e) {
-    e.preventDefault();
-    const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
-    if (SelectedListName !== 'Choose list') {
-      const table = $("#html_master");
-      const productName = $('#name-of-product').val();
-      const amount = $('#product-amount').val();
-      const status = "need to buy";
-      const result = ListProducts.find(obj => (obj.listName === SelectedListName));
-      if (amount > 0) {
-        if (result?.products.filter(obj => (obj.productName.toLowerCase() === productName.toLowerCase())).length) {
-          alert('you already have this product in your current list')
+  // $("form#addProduct").submit(function (e) {
+  //   // e.preventDefaul t();
+  //   const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
+  //   if (SelectedListName !== 'Choose list') {
+  //     const table = $("#html_master");
+  //     const productName = $('#name-of-product').val();
+  //     const amount = $('#product-amount').val();
+  //     const status = "need to buy";
+  //     const result = ListProducts.find(obj => (obj.listName === SelectedListName));
+  //     if (amount > 0) {
+  //       if (result?.products.filter(obj => (obj.productName.toLowerCase() === productName.toLowerCase())).length) {
+  //         alert('you already have this product in your current list')
 
-        } else {
-          $('#product-amount').val("");
-          $('#name-of-product').val("");
-          result?.products.unshift({ productName, amount, status, SelectedListName }); // adding to the first position in the array
-          let newRow = "<tr>";
-          newRow += `<td>${productName}</td>`;
-          newRow += `<td >${amount}</td>`;
-          newRow += `<td>${status}</td>`;
-          newRow += "<td>";
-          newRow += "<button type='button' class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>";
-          newRow += "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>";
-          newRow += "</td>";
-          newRow += "</tr>";
-          table.prepend(newRow);
-          $("#name-of-product").focus();
-          alert(`you added ${productName}`);
-          $('table').show();
-          $('#emptyTable').hide();
-          $('#addingProductModal').modal('hide');
+  //       } else {
+  //         // $('#product-amount').val("");
+  //         // $('#name-of-product').val("");
+  //         result?.products.unshift({ productName, amount, status, SelectedListName }); // adding to the first position in the array
+  //         let newRow = "<tr>";
+  //         newRow += `<td>${productName}</td>`;
+  //         newRow += `<td >${amount}</td>`;
+  //         newRow += `<td>${status}</td>`;
+  //         newRow += "<td>";
+  //         newRow += "<button type='button' class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>";
+  //         newRow += "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>";
+  //         newRow += "</td>";
+  //         newRow += "</tr>";
+  //         table.prepend(newRow);
+  //         $("#name-of-product").focus();
+  //         alert(`you added ${productName}`);
+  //         $('table').show();
+  //         $('#emptyTable').hide();
+  //         $('#addingProductModal').modal('hide');
           
-        }
-      } else {
-        alert('you cannot add a negative amount')
-      }
-    } else {
-      alert("first choose a list");
-    }
-  });
+  //       }
+  //     } else {
+  //       alert('you cannot add a negative amount')
+  //     }
+  //   } else {
+  //     alert("first choose a list");
+  //   }
+  // });
   // editing the product from bought to need to buy and from need to buy to bought \
   // also changing the sort and disable able the delete button  
-  $(document).on("click", '.my-button-edit', function () {
-    const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
-    const row = $(this).closest('tr'); // parents 
-    const name = $(row.find('td')[0]).text();
-    const status = $(row.find('td')[2]).text();
-    const specificList = ListProducts.find((obj => obj.listName === SelectedListName));
-    if (status === "bought") {
-      $(row.find('td')[2]).html('need to buy');
-      specificList.products.find((obj => obj.productName === name)).status = "need to buy";
-      sortTable(specificList.products);
-      // attr equal to prop
-      // / prop() method sets or returns properties and values of the selected elements.
-      //The attr() method sets or returns attributes and values of the selected elements.
-    } else {
-      $(row.find('td')[2]).html('bought');
-      specificList.products.find((obj => obj.productName === name)).status = "bought";
-      sortTable(specificList.products);
-    }
-  });
+  // $(document).on("click", '.my-button-edit', function () {
+  //   const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
+  //   const row = $(this).closest('tr'); // parents 
+  //   const name = $(row.find('td')[0]).text();
+  //   const status = $(row.find('td')[2]).text();
+  //   const specificList = ListProducts.find((obj => obj.listName === SelectedListName));
+  //   if (status === "bought") {
+  //     $(row.find('td')[2]).html('need to buy');
+  //     specificList.products.find((obj => obj.productName === name)).status = "need to buy";
+  //     sortTable(specificList.products);
+  //     // attr equal to prop
+  //     // / prop() method sets or returns properties and values of the selected elements.
+  //     //The attr() method sets or returns attributes and values of the selected elements.
+  //   } else {
+  //     $(row.find('td')[2]).html('bought');
+  //     specificList.products.find((obj => obj.productName === name)).status = "bought";
+  //     sortTable(specificList.products);
+  //   }
+  // });
 
   function alertModal() {
     const name = $(staticRow.find('td')[0]).text();
-    $('#deletingProductModal').find('.modal-body').text(`do you want to delete ${name} ?`)
+    $('#deletingProductModal').find('.modal-body').text(`do you want to delete ${name} ?`);
 
-    $('#deletingProductModal').modal('show')
+    $('#deletingProductModal').modal('show');
   }
 
   let staticRow;
 
   // do it on click just if its dynamic 
   $(document).on("click", '#deleteProductBtn', function () {
-    const name = $(staticRow.find('td')[0]).text();
-    const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
-    const result = ListProducts.find(obj => (obj.listName === SelectedListName));
-    const objIndex = result.products.findIndex(obj => (obj.productName === name))
-    result.products.splice(objIndex, 1) // this is how to remove an item
+    window.location.href=`delete.php?id=${staticRow.data('id')}`;
+    // const name = $(staticRow.find('td')[0]).text();
+    // const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
+    // const result = ListProducts.find(obj => (obj.listName === SelectedListName));
+    // const objIndex = result.products.findIndex(obj => (obj.productName === name))
+    // result.products.splice(objIndex, 1) // this is how to remove an item
 
-    if (!result.products.length) {
-      $('table').hide();
-      $('#emptyTable').show();
+    // if (!result.products.length) {
+    //   $('table').hide();
+    //   $('#emptyTable').show();
 
-    }
-    if (result.products.length < 2) {
-      $("table").css("margin-button : 500px!important");
+    // }
+    // if (result.products.length < 2) {
+    //   $("table").css("margin-button : 500px!important");
 
-    }
-    $(staticRow).remove();
-    $('#deletingProductModal').modal('hide')
+    // }
+    // $(staticRow).remove();
+    // $('#deletingProductModal').modal('hide')
 
   });
   // deleting the product from the list and from the array
   $(document).on("click", '.my-button-delete', function () {
-    const row = $(this).closest('tr');
-    staticRow = row;
+    staticRow  = $(this).closest('tr');
     alertModal();
 
   });
@@ -201,14 +233,14 @@ $(document).ready(function () {
 
   // adding a new list name to the Products list name 
   $("form#addNewListName").submit(function (e) {
-    e.preventDefault();
+   // e.preventDefault();
     const optionValue = $('#nameOfNewList').val();
     const flag = ProductsListName.includes(optionValue.toLowerCase());
     if (flag) {
       alert(`you allready have a list that called  ${optionValue}`);
 
     } else {
-      $('#nameOfNewList ').val("");
+      // $('#nameOfNewList ').val("");
       $('#selectedOptions').append(`<option value="${optionValue}"> 
                                       ${optionValue} </option>`);
       $("#nameOfNewList").focus();

@@ -4,17 +4,18 @@ var admin = {
 };
 let user;
 $(document).ready(function () {
-let x=  $('#session_something').val();
-    if ( !$('#session_something').val()) {
+    $('#user-exist').hide();
+    let x = $('#session_something').val();
+    if (!$('#session_something').val()) {
         $('#loginNav').show();
         $("#logoutNav").css("visibility", "hidden")
         $("#listsNav").css("visibility", "hidden")
-      
+
     } else {
         $('#loginNav').hide();
         $("#logoutNav").css("visibility", "visible")
         $("#listsNav").css("visibility", "visible")
-     }
+    }
 
     // clicking to create new account
     $(".newAccount").click(function () {
@@ -42,7 +43,7 @@ let x=  $('#session_something').val();
         }
     });
 
-  
+
 
     // cusror -email input
     $(document).on(' mouseenter mouseleave', '#email', function () {
@@ -66,18 +67,19 @@ let x=  $('#session_something').val();
         }
     });
 
-    /// submit register  form
+    /// submit register form
     $('form#form-register').submit(function (event) {
         if ($(this).valid()) {
             event.preventDefault();
             const email = $('#email').val();
             const nickname = $('#nickname').val();
             const phone = $('#phone').val();
-            user={email
-                ,nickname
-                ,phone
-                };
-             $("#register").modal('hide');
+            user = {
+                email
+                , nickname
+                , phone
+            };
+            $("#register").modal('hide');
             $("#passwordPage").modal('show');
 
         }
@@ -111,21 +113,36 @@ let x=  $('#session_something').val();
 
     });
 
-    /// submit password  form
+    /// submit password form
     $('form#formPassword').submit(function (event) {
         if ($(this).valid()) {
             event.preventDefault();
             const confirmPassword = $('#confirmPassword').val();
-            alert("success");
-            $("#passwordPage").modal('hide');email
-            location.href =`insertUser.php?confirmPassword=${confirmPassword}&email=${user.email}&nickname=${user.nickname}&phone=${user.phone} `;
-
+            $.ajax({
+                url: "../api/addUser.php",
+                type: "POST",
+                data: ({ confirmPassword, email: user.email, nickname: user.nickname ,phone:user.phone}),
+                success: function (data) {
+                    console.log(data);
+                    alert("success");
+                    $("#passwordPage").modal('hide');
+                },
+                error: function (err) {
+                    $("#user-exist").fadeTo(2000, 500, function () {
+                        $(this).slideUp(1000);
+                    });
+                }
+            })
         }
     });
-
+    //back
+    $("#backBtn").on("click", function () {
+        $("#register").modal('show');
+      });
+    
     /// logout
     $("#logountBtn").on("click", function () {
         location.href = 'logout.php';
-     });
+    });
 
 });

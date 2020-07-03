@@ -30,96 +30,113 @@ let ListProducts = [{
 ];
 
 $(document).ready(function () {
-  // $('table').hide();
-  // $('#emptyTable').show()
+  $("#success-alert").hide();
+  $('table').hide();
+  $('#emptyTable').show()
   $('#listsNav').show();
   $('#loginNav').hide();
   $("#logoutNav").css("visibility", "visible")
   $("#listsNav").css("visibility", "visible")
-
+  $('#addNewProduct').attr("disabled", true);
   $("#logountBtn").on("click", function () {
     location.href = 'logout.php';
   });
-   // when the user selected list
-    $("#selectedOptions").change(function () {
-    let SelectedListId = $('#selectedOptions').find(":selected").data('id');
-    // window.location.href = 'showProducts.php?id='+SelectedListName;
+  var userEmail = $('.user_email').val();
+
+  let SelectedListId;
+  let productsLength = 0;
+
+  // when the user selected list
+  $("#selectedOptions").change(function () {
+    $('#addNewProduct').attr("disabled", false);
+    SelectedListId = $('#selectedOptions').find(":selected").data('id');
+    autocomplete();
+    $('table tbody').empty();
     $.ajax({
-      url:"../api/getProducts.php",
-      type:"POST",
-      data:({id:SelectedListId}),
-      success:function(data){
-        console.log(data)
-          // $("table#customers tbody").html("");
-          for (item of data ){
-              product = {"productname":item['Productname'],"amount":item['amount'],"statusProduct":item['statusProduct'], "id" :item['id']}
-              addProductToTable(product);
+      url: "../api/getProducts.php",
+      type: "POST",
+      data: ({ id: SelectedListId }),
+      success: function (data) {
+        if (data.length > 0) {
+          $('#emptyTable').hide();
+          $('table').show();
+          productsLength = data.length;
+          for (item of data) {
+            product = { "productname": item['Productname'], "amount": item['amount'], "statusProduct": item['statusProduct'], "id": item['id'] }
+            addProductToTable(product);
           }
-        },
-        error:function(err){
-            console.log(err);
+        } else {
+          $('table').hide();
+          $('#emptyTable').show();
         }
-  }) 
-    // const obj = ListProducts.find(obj => (obj.listName === SelectedListName));
-    // if (obj?.products) {
-    //   setTableInfo(obj.products)
-    // } else {
-    //   $('table tbody').empty();
-    //   $('table').hide();
-    //   $('#emptyTable').show();
-
-    // }
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
   });
+
   function addProductToTable(product) {
- 
-    let tr = `<tr data-id=${product.id}>
-        <td class="productname">${product.productname}</td>
-        <td class="amount">${product.amount}</td>
-        <td class=""statusProduct">${product.statusProduct}</td>
-        <td>
-          <button type='button' onclick="window.location.href='update.php?id=<?php echo $row['id'] ?>&&statusProduct=<?= $row['statusProduct']; ?>'" class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>
-          <button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>
-        </td>
-    </tr>`;
-    $("table#products tbody").append(tr);
-}
+    let newRow = product.statusProduct === "bought" ? `<tr data-id=${product.id} style='text-decoration: line-through ; color:red;'>` : `<tr data-id=${product.id}>`;
+    newRow += `<td class="productname">${product.productname}</td>`;
+    newRow += `<td class="amount">${product.amount}</td>`;
+    newRow += `<td class=""statusProduct">${product.statusProduct}</td>`;
+    newRow += "<td>";
+    newRow += "<button type='button' class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>";
+    newRow += product.statusProduct === "bought" ? "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete' disabled='true' ><i class='fa fa-trash'></i></button>" : "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>";
+    newRow += "</td>";
+    newRow += "</tr>";
+    product.statusProduct === "bought" ? $("table#products tbody").append(newRow) : $("table#products tbody").prepend(newRow);
+    //prepend up
+    // append down
+  }
 
-  // set table to selected list
-  // function setTableInfo(products) {
-  //   if (products.length) {
-  //     $('#emptyTable').hide();
-  //     const table = $("#html_master");
-  //     $('table tbody').empty();
-  //     $('table').show();
-  //     products.forEach(function (product) {
-  //       let newRow = product.status === "bought" ? "<tr style='text-decoration: line-through ; color:red;'>" : "<tr>";
-  //       newRow += `<td>${product.productName}</td>`;
-  //       newRow += `<td >${product.amount}</td>`;
-  //       newRow += `<td>${product.status}</td>`;
-  //       newRow += "<td>";
-  //       newRow += "<button type='button' class='btn btn-success my-button-edit'><i class='fa fa-edit'></i></button>";
-  //       newRow += product.status === "bought" ? "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete' disabled='true' ><i class='fa fa-trash'></i></button>" : "<button type='button' class='my-1 my-md-0  mx-0 mx-md-2 btn btn-danger my-button-delete'><i class='fa fa-trash'></i></button>";
-  //       newRow += "</td>";
-  //       newRow += "</tr>";
-  //       table.append(newRow);
-  //     });
-  //   } else {
-  //     $('table tbody').empty();
-  //     $('table').hide();
-  //     $('#emptyTable').show();
-
-  //   }
-
-
-  // };
   $("#addProductBtn").click(function () {
     $("form#addProduct .btnSubmit").click();
-})
-  // adding new product to the list and to the table
-  //ListProducts
-  // $("form#addProduct").submit(function (e) {
-  //   // e.preventDefaul t();
-  //   const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
+  })
+
+  //adding new product to the list and to the table
+  $("form#addProduct").submit(function (e) {
+    e.preventDefault();
+    $('table').show();
+    $('#emptyTable').hide()
+    let productname = $("#name-of-product").val().trim().toLowerCase();
+    let amount = $("#product-amount").val();
+    const statusProduct = 'Need to buy';
+    $.ajax({
+      url: "../api/findSpecificProduct.php",
+      type: "GET",
+      data: ({ SelectedListId, productname }),
+      success: function (data) {
+        console.log(data);
+        if (data) {
+          $.ajax({
+            url: "../api/addProduct.php",
+            type: "post",
+            data: ({ productname, amount, SelectedListId, email: userEmail }),
+            success: function (data) {
+              $("#name-of-product").val("");
+              $("#product-amount").val("");
+              productsLength++;
+              console.log(data);
+              let id = data;
+              addProductToTable({ id, productname, amount, statusProduct });
+            },
+            error: function (err) {
+              console.log(err);
+            }
+          })
+        }
+        else {
+          alert("You allready have a product with this name");
+        }
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    })
+    $("#name-of-product").focus();
+  })  //   const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
   //   if (SelectedListName !== 'Choose list') {
   //     const table = $("#html_master");
   //     const productName = $('#name-of-product').val();
@@ -149,7 +166,7 @@ $(document).ready(function () {
   //         $('table').show();
   //         $('#emptyTable').hide();
   //         $('#addingProductModal').modal('hide');
-          
+
   //       }
   //     } else {
   //       alert('you cannot add a negative amount')
@@ -157,41 +174,63 @@ $(document).ready(function () {
   //   } else {
   //     alert("first choose a list");
   //   }
-  // });
-  // editing the product from bought to need to buy and from need to buy to bought \
+
+  // editing the product from bought to need to buy and from need to buy to bought
   // also changing the sort and disable able the delete button  
-  // $(document).on("click", '.my-button-edit', function () {
-  //   const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
-  //   const row = $(this).closest('tr'); // parents 
-  //   const name = $(row.find('td')[0]).text();
-  //   const status = $(row.find('td')[2]).text();
-  //   const specificList = ListProducts.find((obj => obj.listName === SelectedListName));
-  //   if (status === "bought") {
-  //     $(row.find('td')[2]).html('need to buy');
-  //     specificList.products.find((obj => obj.productName === name)).status = "need to buy";
-  //     sortTable(specificList.products);
-  //     // attr equal to prop
-  //     // / prop() method sets or returns properties and values of the selected elements.
-  //     //The attr() method sets or returns attributes and values of the selected elements.
-  //   } else {
-  //     $(row.find('td')[2]).html('bought');
-  //     specificList.products.find((obj => obj.productName === name)).status = "bought";
-  //     sortTable(specificList.products);
-  //   }
-  // });
+  $(document).on("click", '.my-button-edit', function () {
+    const row = $(this).closest('tr'); // parents 
+    let statusProduct = $(row.find('td')[2]).text();
+    const productname = $(row.find('td')[0]).text();
+    const amount = $(row.find('td')[1]).text();
+    const id = row.data('id');
+    statusProduct = statusProduct === 'Need to buy' ? 'bought' : 'Need to buy';
+    $.ajax({
+      url: "../api/updateProduct.php",
+      type: "POST",
+      data: ({ id, statusProduct }),
+      success: function (data) {
+        row.remove();
+        addProductToTable({ id, productname, amount, statusProduct });
+        console.log(data)
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
+  });
 
   function alertModal() {
     const name = $(staticRow.find('td')[0]).text();
     $('#deletingProductModal').find('.modal-body').text(`do you want to delete ${name} ?`);
-
     $('#deletingProductModal').modal('show');
   }
 
   let staticRow;
 
-  // do it on click just if its dynamic 
+  // delete product
   $(document).on("click", '#deleteProductBtn', function () {
-    window.location.href=`delete.php?id=${staticRow.data('id')}`;
+    const id = staticRow.data('id');
+    $("#deletingProductModal").modal("hide");
+    productsLength--;
+    staticRow.fadeOut(function () {
+      $.ajax({
+        url: "../api/deleteProduct.php",
+        type: "POST",
+        data: ({ id }),
+        success: function (data) {
+          staticRow.remove();
+          console.log(data)
+        },
+        error: function (err) {
+          console.log(err);
+        }
+      })
+    });
+    if (!productsLength) {
+      $('table').hide();
+      $('#emptyTable').show();
+    }
+
     // const name = $(staticRow.find('td')[0]).text();
     // const SelectedListName = $('#selectedOptions').find(":selected").text().trim();
     // const result = ListProducts.find(obj => (obj.listName === SelectedListName));
@@ -211,113 +250,165 @@ $(document).ready(function () {
     // $('#deletingProductModal').modal('hide')
 
   });
-  // deleting the product from the list and from the array
-  $(document).on("click", '.my-button-delete', function () {
-    staticRow  = $(this).closest('tr');
-    alertModal();
 
+  // deleting the product modal alert
+  $(document).on("click", '.my-button-delete', function () {
+    staticRow = $(this).closest('tr');
+    alertModal();
   });
+
   // hover on the table 
   $(document).on(' mouseenter mouseleave', 'tbody tr', function () {
     $(this).toggleClass('highlight')
       .css('cursor', 'pointer');
   });
+
   // hover on the list
   $("#listClick").on("click", function () {
     $("#addingNewListSection").toggle();
   });
+
   // hideing the  adding list options
   $("#cancelAddList").on("click", function () {
     $("#addingNewListSection").hide();
   });
 
-  // adding a new list name to the Products list name 
+  // keeping new list obj to add it to selects in the modal 
+  var listobj = { id: "data", name: "newList" };
+
+  // adding a new list 
   $("form#addNewListName").submit(function (e) {
-   // e.preventDefault();
-    const optionValue = $('#nameOfNewList').val();
-    const flag = ProductsListName.includes(optionValue.toLowerCase());
-    if (flag) {
-      alert(`you allready have a list that called  ${optionValue}`);
+    e.preventDefault();
+    const newList = $('#nameOfNewList').val().trim().toLowerCase();
+    $.ajax({
+      url: "../api/findSpecificList.php",
+      type: "GET",
+      data: ({ newList, userEmail }),
+      success: function (data) {
+        console.log(data);
+        if (data) {
+          $.ajax({
+            url: "../api/addList.php",
+            type: "post",
+            data: ({ newList, userEmail }),
+            success: function (data) {
+              listobj = { id: data, name: newList };
+              $('#addingProductFromCurrentList').find('.modal-title').text(`You succeeded to add ${newList} list`);
+              $("#addingProductFromCurrentList").modal('show');
+              console.log(data);
+              $('#addNewProduct').attr("disabled", false);
+              $('#selectedOptions').append(`<option data-id="${data}" selected>${newList}</option>`);
+              SelectedListId = data;
+              $('table tbody').empty();
+              $('table').hide();
+              $('#emptyTable').show();
+              $("#nameOfNewList").focus();
+              $('#nameOfNewList').val("");
+            },
+            error: function (err) {
+              console.log(err);
+            }
+          })
+        }
+        else {
+          //.fadeTo( duration, opacity [, complete A CB ] )
+          $("#danger-alert").fadeTo(2000, 500, function () {
+            $(this).slideUp(1000);
+          });
+        }
 
-    } else {
-      // $('#nameOfNewList ').val("");
-      $('#selectedOptions').append(`<option value="${optionValue}"> 
-                                      ${optionValue} </option>`);
-      $("#nameOfNewList").focus();
-      alert(`you added ${optionValue}`);
-      ProductsListName.push(optionValue);
-      ListProducts.push({
-        listName: optionValue,
-        products: []
-      })
+      },
+    error: function (err) {
+      console.log(err);
     }
-
+    })
+$("#firstName").focus();
   });
-  // sorting the table when editing  a product
-  function sortTable(products) {
-    products.sort(function (a, b) {
-      if (a.status > b.status)
-        return -1;
-      return 1;
-    });
-    $('table tbody').empty();
-    setTableInfo(products)
-  }
-  //auto complete
-  (function () {
-    var productsAutoComplete = ['wheat', 'rye', 'oats', 'corn', 'barley', 'buckwheat', 'rice', 'rolls', 'buns', 'cakes', 'cookies', 'pies', 'cereal',
-      'corn flakes', 'oat flakes', 'wheat flakes', 'rice flakes', 'muesli', 'popcorn', 'pasta', 'macaroni', 'noodles', 'spaghetti', 'vermicelli',
-      'ravioli', 'dumplings', 'flour', 'dough', 'bread', 'white bread', 'whole-wheatbread', 'rye bread', 'raisin bread', 'garlic bread', 'corn bread',
-      'pita bread', 'tortilla', 'buns', 'croissant', 'bagel', 'hamburger bun', 'hot dog bun', 'cracker', 'biscuit', 'cookie', 'toast', 'pretzel', 'waffle',
-      'crouton', 'cake', 'chocolate cake', 'honey cake', 'coffee cake', 'oatmeal cookie', 'chocolate cookie', 'pie', 'apple pie', 'blueberry pie',
-      'cherry pie', 'homemade pie', 'tart', 'apple tart', 'pizza', 'muffin', 'pancake', 'meat', 'beef', 'pork', 'veal', 'lamb', 'mutton', 'beefsteak', 'roast beef',
-      'ground beef', 'hamburger', 'spare rib', 'lamb chop', 'veal cutlet', 'pastrami', 'cornedbeef', 'sausage', 'salami', 'smoked sausage', 'Bologna', 'hotdogs',
-      'chicken', 'turkey', 'eggs', 'chicken leg', 'drumstick', 'chicken wing', 'chicken breast', 'turkey breast', 'fish', 'salmon', 'trout', 'sturgeon',
-      'cod', 'tuna', 'mackerel', 'anchovy', 'mullet', 'carp', 'sardine', 'salmon steak', 'smoked fish', 'salted fish', 'milk', 'whole milk',
-      'low-fat milk', 'nonfat milk', 'pasteurized milk', 'yogurt', 'kefir', 'sourmilk', 'butter milk', 'cream', 'sour cream', 'butter',
-      'cottage cheese', 'Cheddar cheese', 'Mozzarella chesse', 'Roquefort cheese', 'blue cheese', 'ice cream', 'vanilla ice cream', 'chocolate ice cream',
-      'fruit ice', 'strawberry ice cream', 'ice-cream cone', 'popsicle', 'berries', 'dried fruit', 'nuts', 'fresh fruit', 'apple', 'pear', 'apricot', 'peach',
-      'nectarine', 'plum', 'grapes', 'cherry', 'sweetcherry', 'lemon', 'lime', 'orange', 'tangerine', 'grapefruit', 'banana', 'kiwi', 'pineapple', 'olive',
-      'fig', 'papaya', 'mango', 'avocado', 'coconut', 'persimmon', 'pomegranate', 'melon', 'watermelon', 'berry', 'berries', 'strawberry', 'raspberry',
-      'cranberry', 'blueberry', 'dried fruit', 'dried apricots', 'raisins', 'figs', 'prunes', 'dates', 'candied fruit', 'nuts', 'hazelnuts', 'walnuts',
-      'almonds', 'chestnuts', 'peanuts', 'pistachio nuts', 'cashew nuts', 'pecans', 'macadamia nuts', 'apricot pits', 'pumpkin seeds', 'sunflower seeds',
-      'raspberry jam', 'cranberry jam', 'grape jelly', 'marmalade', 'honey', 'maple syrup', 'peanut butter', 'herbs', 'vegetables', 'fresh vegetables', 'salad',
-      'vegetables', 'canned vegetables', 'leaf vegetables', 'leafy greens', 'greens', 'tomato', 'cucumber', 'carrot', 'beet', 'potato', 'onion', 'green onions',
-      'leek', 'sweet pepper', 'red pepper', 'green pepper', 'yellow pepper', 'paprika', 'hotpepper', 'chili pepper', 'cabbage', 'cauliflower', 'broccoli',
-      'Brussels sprouts', 'collard', 'kale', 'kohlrabi', 'mushrooms', 'lettuce', 'spinach', 'celery', 'asparagus', 'artichoke', 'cress', 'watercress', 'garlic',
-      'eggplant', 'aubergine', 'squash', 'gourd', 'zucchini', 'pumpkin', 'turnip', 'radish', 'pickled cucumbers', 'pickles', 'marinated cucumbers', 'sauerkraut',
-      'canned olives', 'peas', 'corn', 'green peas', 'sweet peas', 'green beans', 'lima beans', 'kidney beans', 'black beans', 'soybeans', 'lentil',
-      'corn', 'sweet corn', 'maize', 'coffee beans', 'parsley', 'basil', 'coriander', 'mint', 'fruit juice', 'beverages', 'drinks', 'applejuice',
-      'orange juice', 'grapefruit juice', 'lemon juice', 'tomato juice', 'fresh fruit juice', 'tea', 'green tea', 'black tea', 'tea with milk',
-      'iced tea', 'herbaltea', 'mint tea', 'Indian tea', 'coffee', 'instant coffee', 'espresso', 'cappuccino', 'decaffeinated coffee', 'black coffee',
-      'cocoa', 'hot chocolate', 'milk shake', 'water', 'mineral water', 'spring water', 'soft drink', 'soda water', 'lemonade', 'cider', 'ginger ale',
-      'alcoholic drinks', 'liquor', 'beer', 'ale', 'wine', 'red wine', 'white wine', 'champagne', 'vodka', 'cognac', 'brandy', 'whiskey', 'whisky',
-      'gin', 'rum', 'liqueur', 'cocktail', 'punch', 'sauces', 'salad dressings', 'vegetable oils', 'fats', 'tomato sauce', 'ketchup', 'mushroom sauce',
-      'meat sauce', 'steak sauce', 'gravy', 'spaghetti sauce', 'hot sauce', 'chili sauce', 'barbecue sauce', 'sweet-and-sour sauce', 'spicy sauce',
-      'garlic sauce', 'white sauce', 'dip sauce', 'soy sauce', 'apple sauce', 'cranberry sauce', 'mayonnaise', 'salad dressing', 'vegetable oil',
-      'olive oil', 'corn oil', 'sunflower seed oil', 'sesame oil', 'margarine', 'grease', 'fat', 'animal fat', 'vegetable fat', 'seasoning',
-      'spices', 'flavoring', 'herbs', 'seeds', 'vinegar', 'pepper', 'ground pepper', 'whole pepper', 'red pepper', 'hot pepper', 'chili pepper',
-      'salt', 'parsley', 'mint', 'coriander', 'bay leaf', 'cloves', 'cinnamon', 'caraway', 'thyme', 'cardamom', 'tarragon', 'oregano', 'marjoram',
-      'rosemary', 'garlic', 'mustard', 'lemon peel', 'candy', 'candies', 'sweets', 'caramels', 'mint drops', 'jelly beans', 'lollipop', 'bonbons',
-      'chocolate candies', 'chocolate', 'chocolate bar', 'candy bar', 'marshmallow'];
 
-    $("#name-of-product").autocomplete({
-      source: productsAutoComplete
-    });
+$(".exitFromModalWitoutDuplicate").click(function () {
+  $('#selectedOptionsModal').append(`<option data-id="${listobj}" selected>${listobj}</option>`);
+  $("#addingProductFromCurrentList").modal("hide");
+});
 
-    // Overrides the default autocomplete filter function to search only from the beginning of the string
-    //Finds the elements of an array which satisfy a filter function. The original array is not affected
-    $.ui.autocomplete.filter = function (array, term) {
-      var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
-      return $.grep(array, function (value) {
-        return matcher.test(value.label || value.value || value);
-      });//The test() method tests for a match in a string.
+$("#addingProductsFrom1list2Another").click(function () {
+  const id = $('#selectedOptionsModal').find(":selected").data('id');
+  $('#selectedOptionsModal').append(`<option data-id="${listobj}" selected>${listobj}</option>`);
+  $("#addingProductFromCurrentList").modal("hide");
+  $.ajax({
+    url: "../api/getProducts.php",
+    type: "POST",
+    data: ({ id }),
+    success: function (data) {
+      if (data.length > 0) {
+        $('#emptyTable').hide();
+        $('table').show();
+        productsLength = data.length;
+        let products = [];
+        index = 0;
+        for (item of data) {
+          product = { "productname": item['Productname'], "amount": item['amount'], "statusProduct": item['statusProduct'], "id": item['id'] }
+          products.push(product);
+          $.ajax({
+            url: "../api/addProduct.php",
+            type: "post",
+            data: ({ productname: product.productname, amount: product.amount, SelectedListId, email: userEmail }),
+            success: function (data) {
+              const product = products[index];
+              index++;
+              productsLength++;
+              console.log(data);
+              let id = data;
+              addProductToTable({ id, productname: product.productname, amount: product.amount, id: SelectedListId, statusProduct: 'need to buy' });
+            },
+            error: function (err) {
+              console.log(err);
+            }
+          })
+        }
+      }
+    },
+    error: function (err) {
+      console.log(err);
+    }
+  });
+});
 
-      /* The $.grep() method removes items from an array as necessary so that all
-          remaining items pass a provided test. The test is a function that is passed an array
-           item and the index of the item within the array. Only if the test returns true will
-           the item be in the result array.*/
-    };
-  })();
+//auto complete
+function autocomplete() {
+  var productsAutoComplete = [];
+  $.ajax({
+    url: "../api/gatAllProducts.php",
+    type: "GET",
+    data: ({ id: SelectedListId, email: userEmail }),
+    success: function (data) {
+      if (data.length > 0) {
+        for (item of data) {
+          if (!productsAutoComplete.includes(item)) {
+            productsAutoComplete.push(item);
+          }
+        }
+        console.log(data);
+        $("#name-of-product").autocomplete({
+          source: productsAutoComplete
+        });
+        // Overrides the default autocomplete filter function to search only from the beginning of the string
+        //Finds the elements of an array which satisfy a filter function. The original array is not affected
+        $.ui.autocomplete.filter = function (array, term) {
+          var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
+          return $.grep(array, function (value) {
+            return matcher.test(value.label || value.value || value);
+          });//The test() method tests for a match in a string.
 
+          /* The $.grep() method removes items from an array as necessary so that all
+              remaining items pass a provided test. The test is a function that is passed an array
+               item and the index of the item within the array. Only if the test returns true will
+               the item be in the result array.*/
+        };
+      }
+    },
+    error: function (err) {
+      console.log(err);
+    }
+  })
+};
 });

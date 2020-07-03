@@ -180,6 +180,10 @@ require_once "../parts/header.php";
           <h2 class="modal-title" style="padding-left: 15px;padding-top: 15px;">Create an
             account</h2>
         </div>
+        <div class="alert alert-danger" id="user-exist">
+                       <strong> You allready have a list with this name </strong>
+        </div>
+
         <div class="row justify-content-center">
           <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_IQ2Fuq.json" background="transparent" speed="1" style="width: 200px; height: 200px;" loop autoplay></lottie-player>
         </div>
@@ -204,6 +208,7 @@ require_once "../parts/header.php";
               </div>
             </div>
             <div class="modal-footer">
+              <button type="button" class="btn btn-danger" id="backBtn" data-dismiss="modal">Back</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="submit" value="Submit" class="btn btn-primary">save</button>
             </div>
@@ -252,10 +257,6 @@ require_once "../parts/header.php";
       </div>
     </div>
   </div>
-
-
-
-
 
   <!-- Optional JavaScript -->
   <!-- jQuery first -->

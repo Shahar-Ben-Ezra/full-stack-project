@@ -45,7 +45,7 @@ if ($conn->query($sql) === TRUE) {
 $sql = "CREATE TABLE PRODUCTLIST (
     id INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     Productname VARCHAR(30) NOT NULL, amount INT(30) NOT NULL,
-    statusProduct VARCHAR(20)NOT NULL ,
+    statusProduct VARCHAR(20)NOT NULL ,  email VARCHAR(30) NOT NULL,
     listId INT(6) NOT NULL,FOREIGN KEY (listid) REFERENCES lists(listId)
     )";
 if ($conn->query($sql) === TRUE) {

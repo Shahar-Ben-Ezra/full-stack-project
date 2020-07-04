@@ -17,8 +17,6 @@ if ($conn->query($sql) === TRUE)
 
 $conn = new mysqli($servername, $username, $password, 'PETEK');
 
-
-
 $sql = "CREATE TABLE users (
         email VARCHAR(30) NOT NULL PRIMARY KEY, nickName VARCHAR(30),
         Phone VARCHAR(50), password VARCHAR(30)NOT NULL
@@ -34,7 +32,6 @@ $sql = "CREATE TABLE lists (
     listId INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     listName VARCHAR(30) NOT NULL,
     email VARCHAR(30)NOT NULL,FOREIGN KEY (email) REFERENCES users(email)
-
     )";
 if ($conn->query($sql) === TRUE) {
     echo "Table lists created successfully";
@@ -42,10 +39,11 @@ if ($conn->query($sql) === TRUE) {
 // else {
 // echo "Error creating table lists: " . $conn->error;
 // }
+
 $sql = "CREATE TABLE PRODUCTLIST (
     id INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    Productname VARCHAR(30) NOT NULL, amount INT(30) NOT NULL,
-    statusProduct VARCHAR(20)NOT NULL ,  email VARCHAR(30) NOT NULL,
+    Productname VARCHAR(30) NOT NULL,amount INT(30) NOT NULL,
+    statusProduct VARCHAR(20)NOT NULL ,email VARCHAR(30) NOT NULL,
     listId INT(6) NOT NULL,FOREIGN KEY (listid) REFERENCES lists(listId)
     )";
 if ($conn->query($sql) === TRUE) {

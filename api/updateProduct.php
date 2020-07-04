@@ -14,5 +14,4 @@ if ($conn->query($sql) === TRUE) {
 } else {
     echo json_encode($conn->error);
 }
-
 $conn->close();

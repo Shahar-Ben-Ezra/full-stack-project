@@ -1,7 +1,7 @@
  <?php
     require_once("db.php");
     session_start();
-
+    //isset — Determine if a variable is declared and is different than NULL
     if (isset($_SESSION['email'])) {
         $email = $_SESSION['email'];
     } else if (isset($_COOKIE['email'])) {
@@ -10,6 +10,7 @@
         $email = null;
     }
     if (isset($_POST["email"])) {
+        //htmlspecialchars — Convert special characters to HTML entities
         $email = htmlspecialchars($_POST['email']);
         $password = htmlspecialchars($_POST['password']);
         $sql = "SELECT * FROM users WHERE email= '$email' && password= '$password'";
@@ -17,8 +18,7 @@
         if ($result->num_rows > 0) {
             $data = $result->fetch_assoc();
             $_SESSION['email'] = $email;
-
-            if ($_POST['stayloggedin'] == 'on') {
+            if (isset($_POST['stayloggedin'])) {
                 setcookie('email', $email, time() + (60 * 60 * 24));
             }
         } else {
@@ -33,13 +33,14 @@
  <?php require_once "../parts/header.php"; ?>
 
  <body>
-     <input type="hidden" value="<?= $email ?>" class="user_email">
 
+     <input type="hidden" value="<?= $email ?>" class="user_email">
      <!-- lists && add product && add list -->
      <div class="container pt-3" id="start">
+         <h4 style="text-align: center; margin-bottom:18px">Welcome <small> You are logged in with <?= $email ?></small> </h4>
          <div class="row">
              <div class="col-12 col-md-10">
-                 <select class="form-control form-control-sm" id="selectedOptions" style=" width:250px;  display: unset!important;">
+                 <select class="autocomplete" id="selectedOptions" style=" width:250px;  display: unset!important;">
                      <option value="" selected disabled hidden>Choose list</option>
                      <?php
                         $sql = "SELECT * FROM lists WHERE email= '$email'";
@@ -56,7 +57,7 @@
                  </select>
                  <a href="#" id="listClick"><label style="cursor:pointer">Add a new list</label></a>
                  <div class="alert alert-danger" id="danger-alert">
-                       <strong> You allready have a list with this name </strong>
+                     <strong> You allready have a list with this name </strong>
                  </div>
                  <div class="row">
                      <div class="container py-2 col-12" id="addingNewListSection">
@@ -68,9 +69,8 @@
                          </form>
                      </div>
                  </div>
-                 <button type="button" data-toggle="modal" id="addNewProduct" data-target="#addingProductModal" class="btn btn-primary">Add
-                     New
-                     product</button>
+                 <button type="button" data-toggle="modal" id="addNewProduct" data-target="#addingProductModal" class="btn btn-primary">
+                     Add new product</button>
              </div>
              <div class="col-12 col-sm-1" id="lottieHide">
                  <script src="https://unpkg.com/@lottiefiles/lottie-player@0.5.1/dist/lottie-player.js"></script>
@@ -81,7 +81,6 @@
          <div class="container" id="notPadding">
              <div class="row">
                  <div class="col-md-9 col-12 " style="margin-top:10px">
-                     <!-- html_master   last id  -->
                      <table class="table table-bordered" id="products">
                          <thead>
                              <tr>
@@ -92,7 +91,6 @@
                              </tr>
                          </thead>
                          <tbody>
-
                          </tbody>
                      </table>
                  </div>
@@ -100,7 +98,7 @@
          </div>
          <!-- lottie animate -->
          <div class="col justify-content-center" id="emptyTable" style="padding-bottom: 15px;">
-             <div class="col text-center">
+             <div class="col text-center" `>
                  <div class="row justify-content-center ">
                      <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_EMTsq1.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
                  </div>
@@ -115,7 +113,7 @@
              <div class="modal-content">
                  <div class="modal-header">
                      <h5 class="modal-title">Logout</h5>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <button  style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                      </button>
                  </div>
@@ -135,7 +133,7 @@
              <div class="modal-content">
                  <div class="modal-header">
                      <h5 class="modal-title">Deleting</h5>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                      </button>
                  </div>
@@ -155,13 +153,15 @@
              <div class="modal-content">
                  <div class="modal-header">
                      <h5 class="modal-title">Adding products from current list</h5>
-                     <button type="button" class="close exitFromModalWitoutDuplicate" aria-label="Close">
+                     <button style="padding: 15px;" type="button" class="close exitFromModalWitoutDuplicate" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                      </button>
                  </div>
                  <div class="modal-body">
-                     <p>Do you want to add all products from current list?</p>
-                     <select class="form-control form-control-sm" id="selectedOptionsModal" style=" width:250px; display: unset!important;">
+                     <p>If you allready have a list,</p>
+                     <p>Do you want to add all products from your chossen list to the current list?</p>
+                     <select id="selectedOptionsModal" style=" width:250px; display: unset!important;">
+                         <option value="" selected disabled hidden>Choose list</option>
                          <?php
                             $sql = "SELECT * FROM lists WHERE email= '$email'";
                             $result = $conn->query($sql);
@@ -189,12 +189,18 @@
              <div class="modal-content">
                  <div class="modal-header">
                      <h5 class="modal-title">Add product</h5>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <button style="padding: 15px;"type="button" class="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                      </button>
                  </div>
                  <div class="modal-body">
                      <form id="addProduct" autocomplete="off">
+                         <div class="alert alert-danger" id="product-exist">
+                             <strong> You allready have this product in your list</strong>
+                         </div>
+                         <div class="alert alert-success" id="product-created">
+                             <strong> wonderful! You success to add product</strong>
+                         </div>
                          <div class="row">
                              <div class="col-6">
                                  <label for="name-of-product">Product name:</label>
@@ -229,7 +235,6 @@
      <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
      <script src="main.js"></script>
 
      <?php require_once "../parts/footer.php"; ?>

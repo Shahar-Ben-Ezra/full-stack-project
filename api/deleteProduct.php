@@ -5,9 +5,9 @@ $id = $_POST['id'];
 
 $sql = "DELETE FROM `productlist` WHERE id=$id";
 
-if ($conn->query($sql)===TRUE) {
+if ($conn->query($sql) === TRUE) {
     echo json_encode("success");
-}else {
+} else {
     echo json_encode($conn->error);
 }
 $conn->close();

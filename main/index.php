@@ -2,19 +2,13 @@
 session_start();
 $email = isset($_SESSION['email']);
 $cookieMail = isset($_COOKIE['email']);
-
 $log = false;
 require_once "../parts/header.php";
-
-
 ?>
- <!-- need to check cookies without session -->
 <body>
-
-
   <h1 style="padding-top:100px ;" class="animate__animated animate__zoomInDown top">petek </h1>
   <h1 class="animate__animated animate__zoomInDown">now you are going to save money!!</h1>
-  <input type="hidden" id="session_something" value="<?= $email||$cookieMail ; ?>">
+  <input type="hidden" id="session_something" value="<?= $email || $cookieMail; ?>">
   <?php if (isset($_GET["status"]) && $_GET["status"] == "fail") : ?>
     <div class=" alert-danger" role="alert">
       <?php $log = true; ?>
@@ -60,13 +54,14 @@ require_once "../parts/header.php";
     </div>
   </div>
   <!-- Modals -->
-
   <!-- login -->
+  <!-- The tabindex attribute explicitly defines the navigation order for focusable elements (typically links and form controls) within a page. It can also be used to define whether elements should be focusable or not. -->
   <div class="modal fade" id="loginModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
+    <!-- : The document role tells assistive technologies with reading or browse modes to use the document mode to read the content contained within this element. -->
       <div class="modal-content">
         <div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
           <h2 class="modal-title col-sm-4" style="padding-left: 15px;padding-top: 15px;">
@@ -76,19 +71,19 @@ require_once "../parts/header.php";
           <script src="https://unpkg.com/@lottiefiles/lottie-player@0.5.1/dist/lottie-player.js"></script>
           <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_UDRFuD.json" background="transparent" speed="1" style="width: 140px;" loop autoplay></lottie-player>
         </div>
-        <form class="form-horizontal" id="signIn" method="POST" action="main.php">
+        <form class="form-horizontal" id="logIn" method="POST" action="main.php">
           <div style="padding-left: 20px;">
             <div class="row">
               <div class="col-3 col-sm-4 marginSpace">
                 <label for="email" class="control-label">Email:</label>
               </div>
               <div class="col-8 col-sm-5">
-                <input type="text" id="email-signIn" name="email" class="form-control" placeholder="Enter email" required>
+                <input type="text" id="email-logIn" name="email" class="form-control" placeholder="Enter email" required>
               </div>
             </div>
             <div class="row">
               <div class="col-3 col-sm-4 marginSpace">
-                <label for="password" class=" control-label ">Password:</label>
+                <label for="password" class="control-label">Password:</label>
               </div>
               <div class="col-8 col-sm-5" style="padding-top: 10px;">
                 <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
@@ -98,15 +93,14 @@ require_once "../parts/header.php";
                     Stay logged in
                   </label>
                 </div>
-
-                <div class="row" style="margin-left : 0px!important; margin-right: 0px!important;margin-bottom: 8px!important; padding-left: 10px;">
+                <div class="row" style="margin-left : 0px!important; margin-right: 0px!important;padding-left: 10px;">
                   <p>Forget Password?</p>
                 </div>
               </div>
             </div>
           </div>
-          <center class="newAccount"><a href="" style="font-size:20px; color:black;" data-toggle="modal">Need an
-              account? Sign Up</a></center>
+          <h5 class="newAccount" style="text-align:center;"><a href="" style="font-size:20px; color:black;" data-toggle="modal">Need an
+              account? Sign Up</a></h5>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">Login</button>
@@ -121,7 +115,7 @@ require_once "../parts/header.php";
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
           <h2 class="modal-title" style="padding-left: 15px;padding-top: 15px;">Create an
@@ -169,21 +163,22 @@ require_once "../parts/header.php";
   </div>
 
   <!-- password -->
-
   <div class="modal fade" id="passwordPage" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
           <h2 class="modal-title" style="padding-left: 15px;padding-top: 15px;">Create an
             account</h2>
         </div>
         <div class="alert alert-danger" id="user-exist">
-                       <strong> You allready have a list with this name </strong>
+          <strong> You allready have acoount with this email go back and change the email </strong>
         </div>
-
+        <div class="alert alert-success" id="user-created">
+          <strong> wonderful! You success to create an account! </strong>
+        </div>
         <div class="row justify-content-center">
           <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_IQ2Fuq.json" background="transparent" speed="1" style="width: 200px; height: 200px;" loop autoplay></lottie-player>
         </div>
@@ -224,7 +219,7 @@ require_once "../parts/header.php";
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">logout</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -239,12 +234,13 @@ require_once "../parts/header.php";
     </div>
   </div>
 
+  <!--log failed modal -->
   <div class="modal fade" id="loginProblem" tabindex="-1" role="dialog">
     <div class="modal-dialog  modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">login problem</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -260,25 +256,22 @@ require_once "../parts/header.php";
 
   <!-- Optional JavaScript -->
   <!-- jQuery first -->
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>  -->
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
   <script src="index.js"></script>
+
   <script>
     <?php if ($log) : ?>
-
       $(document).ready(function() {
-
         <?php if ($log === 'view') : ?>
           $('#loginProblem').find('.modal-body').text(`You must be logged in in order to view the page`)
         <?php endif; ?>
@@ -287,5 +280,6 @@ require_once "../parts/header.php";
       });
     <?php endif; ?>
   </script>
+
   <?php require_once "../parts/footer.php"; ?>
 </body>

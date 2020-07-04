@@ -34,13 +34,13 @@
                             <a class="nav-link" href="index.php"><i class="fa fa-fw fa-home"></i>Home</a>
                         </li>
                         <li class="nav-item">
-                            <a  class="nav-link" id="loginNav" href="" data-toggle="modal" data-target="#loginModal"><i class="fa fa-fw fa-user"></i>Login</a>
+                            <a class="nav-link" id="loginNav" href="" data-toggle="modal" data-target="#loginModal"><i class="fa fa-fw fa-user"></i>Login</a>
                         </li>
                         <li class="nav-item">
-                            <a style="visibility: hidden" class="nav-link" id="listsNav" href="main.php"><i class="fa fa-fw fa-list" ></i>lists</a>
+                            <a style="visibility: hidden" class="nav-link" id="listsNav" href="main.php"><i class="fa fa-fw fa-list"></i>lists</a>
                         </li>
                         <li class="nav-item">
-                            <a style="visibility: hidden" class="nav-link" id="logoutNav" href="#" data-toggle="modal" data-target="#logoutModal" ><i class="fa fa-fw fa-user"></i>logout</a>
+                            <a style="visibility: hidden" class="nav-link" id="logoutNav" href="#" data-toggle="modal" data-target="#logoutModal"><i class="fa fa-fw fa-user"></i>logout</a>
                         </li>
 
                     </ul>

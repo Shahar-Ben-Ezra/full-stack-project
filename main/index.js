@@ -118,9 +118,28 @@ $(document).ready(function () {
                 , nickname
                 , phone
             };
+            $.ajax({
+                url: "../api/sendEmail.php",
+                type: "POST",
+                data: ({ email}),
+                success: function (data) {
+                    console.log(data);
+                    clear();
+                    $("#user-created").fadeTo(3000, 500, function () {
+                        $(this).slideUp(1000, function () {
+                            $("#passwordPage").modal('hide');
+                        });
+                    });
+                },
+                error: function (err) {
+                    $("#user-exist").fadeTo(3000, 500, function () {
+                        $(this).slideUp(1000);
+                    });
+                }
+            })
+        }
             $("#register").modal('hide');
             $("#passwordPage").modal('show');
-        }
     });
 
     /// submit password form

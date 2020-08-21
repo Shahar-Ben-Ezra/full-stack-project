@@ -1,26 +1,22 @@
 $(document).ready(function () {
   $('table').hide();
   $('#emptyTable').show()
-
   $('#listsNav').show();
   $('#loginNav').hide();
-  $("#logoutNav").css("visibility", "visible")
-  $("#listsNav").css("visibility", "visible")
+  $("#logoutNav").show();
+  $("#shareListNav").show();
+  $("#boughtProductsNav").show();
   $('#addNewProduct').attr("disabled", true);
-
+  $('#familylistClick').attr("disabled", true);
   $("#logountBtn").on("click", function () {
     location.href = 'logout.php';
   });
+  $("#ChangeBackground").click(function () {
+    $('body').toggleClass('dark');
+  });
 
-  var userEmail = $('.user_email').val();
-  let SelectedListId;
-  let productsLength = 0;
-
-  // when the user selected list
-  $("#selectedOptions").change(function () {
-    $('#addNewProduct').attr("disabled", false);
-    SelectedListId = $('#selectedOptions').find(":selected").data('id');
-    autocomplete();
+  // clean the table and call the product from DB and set in the table
+  function setTableWithAllProducts() {
     $('table tbody').empty();
     $("#name-of-product").val("");
     $("#product-amount").val("");
@@ -46,6 +42,21 @@ $(document).ready(function () {
         console.log(err);
       }
     });
+  }
+
+  var userEmail = $('.user_email').val();
+  let SelectedListId;
+  let productsLength = 0;
+  let SelectedListName;
+
+  // when the user selected list
+  $("#selectedOptions").change(function () {
+    $('#addNewProduct').attr("disabled", false);
+    SelectedListId = $('#selectedOptions').find(":selected").data('id');
+    SelectedListName = $('#selectedOptions').find(":selected").data('name');
+    $('#familylistClick').attr("disabled", false);
+    autocomplete();
+    setTableWithAllProducts();
   });
 
   function addProductToTable(product) {
@@ -63,11 +74,56 @@ $(document).ready(function () {
     // append down if its bought product
   }
 
-  $("#addProductBtn").click(function () {
-    $("form#addProduct .btnSubmit").click();
+  $("#shareListBtn").click(function () {
+    $("form#sharelist .btnSubmit").click();
+  });
+
+  //sending email to friend share list
+  $("form#sharelist").submit(function (e) {
+    if ($(this).valid() && $(this).validator.form()) {
+      e.preventDefault();
+      $.ajax({
+        url: "../api/findFamilyList.php",
+        type: "GET",
+        data: ({ SelectedListId }),
+        success: function (data) {
+          let familyEmail = $("#email").val().trim().toLowerCase();
+          let name = $("#userName").val().trim().toLowerCase();
+          $.ajax({
+            url: "../api/sendEmail.php",
+            type: "POST",
+            data: ({ familyEmail, listId: SelectedListId, email: data.idCreator, name, listName: SelectedListName }),
+            success: function (data) {
+              $("#email-sent").fadeTo(3000, 500, function () {
+                $(this).slideUp(2000);
+              });
+              $("#email").val("");
+              $("#userName").val("");
+            },
+            error: function (err) {
+              console.log(err);
+            }
+          })
+          $("#email").focus();
+
+        },
+        error: function (err) {
+          console.log(err);
+        }
+      })
+    }
   })
 
-  //adding new product and to the table and DB
+  $("#addProductBtn").click(function () {
+    if ($("#product-amount").val() <= 0) {
+      $("#product-negative").fadeTo(2000, 500, function () {
+        $(this).slideUp(1000);
+      });
+    }
+    $("form#addProduct .btnSubmit").click();
+  });
+
+  //adding new product to the table and DB
   $("form#addProduct").submit(function (e) {
     e.preventDefault();
     $('table').show();
@@ -81,7 +137,7 @@ $(document).ready(function () {
       data: ({ SelectedListId, productname }),
       success: function (data) {
         console.log(data);
-        if (data) {
+        if (!data) {
           $.ajax({
             url: "../api/addProduct.php",
             type: "POST",
@@ -95,7 +151,7 @@ $(document).ready(function () {
               productsLength++;
               console.log(data);
               let id = data;
-              addProductToTable({ id, productname, amount, statusProduct });
+              setTableWithAllProducts();
             },
             error: function (err) {
               console.log(err);
@@ -127,10 +183,13 @@ $(document).ready(function () {
       url: "../api/updateProduct.php",
       type: "POST",
       data: ({ id, statusProduct }),
-      success: function (data) {
-        row.remove();
-        addProductToTable({ id, productname, amount, statusProduct });
-        console.log(data)
+      success: function () {
+        if (statusProduct === 'bought') {
+          row.remove();
+          addProductToTable({ id, productname, amount, statusProduct });
+        } else {
+          setTableWithAllProducts();
+        }
       },
       error: function (err) {
         console.log(err);
@@ -195,7 +254,7 @@ $(document).ready(function () {
 
   // keeping new list obj to add it to selects in the modal 
   var listobj = { id: "data", name: "newList" };
-
+  let numberOfLists = false;
   // adding a new list 
   $("form#addNewListName").submit(function (e) {
     e.preventDefault();
@@ -205,7 +264,6 @@ $(document).ready(function () {
       type: "GET",
       data: ({ newList, userEmail }),
       success: function (data) {
-        console.log(data);
         if (data) {
           $.ajax({
             url: "../api/addList.php",
@@ -215,8 +273,10 @@ $(document).ready(function () {
               listobj = { id: data, name: newList };
               $('#addingProductFromCurrentList').find('.modal-title').text(`You succeeded to add ${newList} list`);
               $("#addingProductFromCurrentList").modal('show');
+              numberOfLists = true;
               console.log(data);
               $('#addNewProduct').attr("disabled", false);
+              $('#familylistClick').attr("disabled", false);
               $('#selectedOptions').append(`<option data-id="${data}" selected>${newList}</option>`);
               SelectedListId = data;
               $('table tbody').empty();
@@ -224,6 +284,16 @@ $(document).ready(function () {
               $('#emptyTable').show();
               $("#nameOfNewList").focus();
               $('#nameOfNewList').val("");
+              $.ajax({
+                url: "../api/addFamilyList.php",
+                type: "POST",
+                data: ({ userEmail, listId: listobj.id, listName: listobj.name }),
+                success: function (data) {
+                },
+                error: function (err) {
+                  console.log(err);
+                }
+              })
             },
             error: function (err) {
               console.log(err);
@@ -331,4 +401,24 @@ $(document).ready(function () {
       }
     })
   };
+
+  jQuery.validator.addMethod("gmail", function (value, element) {
+    return $("#email").val().trim().toLowerCase().includes("gmail");
+  }, "Please enter a valid email address format name@gmail.com");
+
+  $('form#sharelist').validate({
+    rules: {
+      email: {
+        required: true,
+        email: true,
+        gmail: true
+      }
+    },
+    highlight: function (element, erroClass) {
+      $(element).closest('.form-group').addClass('has-error');
+    },
+    unhighlight: function (element, erroClass) {
+      $(element).closest('.form-group').removeClass('has-error');
+    }
+  });
 });

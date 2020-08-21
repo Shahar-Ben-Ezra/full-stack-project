@@ -19,7 +19,7 @@ $conn = new mysqli($servername, $username, $password, 'PETEK');
 
 $sql = "CREATE TABLE users (
         email VARCHAR(30) NOT NULL PRIMARY KEY, nickName VARCHAR(30),
-        Phone VARCHAR(50), password VARCHAR(30)NOT NULL
+        Phone VARCHAR(50), password VARCHAR(255)NOT NULL
         )";
 if ($conn->query($sql) === TRUE) {
     echo "Table users created successfully";
@@ -51,4 +51,28 @@ if ($conn->query($sql) === TRUE) {
 }
 //  else {
 //     echo "Error creating table PRODUCTLIST:" . $conn->error;
+// }
+$sql = "CREATE TABLE FamilyLists (
+    id INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idCreator VARCHAR(30) NOT NULL,
+    idUsers VARCHAR(30) ,
+    listId  INT(6) NOT NULL,
+    listName VARCHAR(30) NOT NULL
+    )";
+if ($conn->query($sql) === TRUE) {
+    echo "Table lists created successfully";
+}
+// else {
+// echo "Error creating table lists: " . $conn->error;
+// }
+$sql = "CREATE TABLE boughtProducts (
+    id INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(30) NOT NULL,
+    Productname VARCHAR(30) NOT NULL
+    )";
+if ($conn->query($sql) === TRUE) {
+    echo "Table PRODUCTLIST created successfully";
+}
+// else {
+// echo "Error creating table lists: " . $conn->error;
 // }

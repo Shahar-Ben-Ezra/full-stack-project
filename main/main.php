@@ -13,13 +13,17 @@
         //htmlspecialchars — Convert special characters to HTML entities
         $email = htmlspecialchars($_POST['email']);
         $password = htmlspecialchars($_POST['password']);
-        $sql = "SELECT * FROM users WHERE email= '$email' && password= '$password'";
+        $sql = "SELECT  password  FROM users WHERE email= '$email'";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $data = $result->fetch_assoc();
-            $_SESSION['email'] = $email;
-            if (isset($_POST['stayloggedin'])) {
-                setcookie('email', $email, time() + (60 * 60 * 24));
+            if (password_verify($password, $data['password'])) {
+                $_SESSION['email'] = $email;
+                if (isset($_POST['stayloggedin'])) {
+                    setcookie('email', $email, time() + (60 * 60 * 24));
+                }
+            } else {
+                header("Location:index.php?status=fail");
             }
         } else {
             header("Location:index.php?status=fail");
@@ -37,7 +41,7 @@
      <input type="hidden" value="<?= $email ?>" class="user_email">
      <!-- lists && add product && add list -->
      <div class="container pt-3" id="start">
-         <h4 style="text-align: center; margin-bottom:18px">Welcome <small> You are logged in with <?= $email ?></small> </h4>
+         <h4 class="welcome" style="text-align: center; margin-bottom:18px">Welcome <small> You are logged in with <?= $email ?></small> </h4>
          <div class="row">
              <div class="col-12 col-md-10">
                  <select class="autocomplete" id="selectedOptions" style=" width:250px;  display: unset!important;">
@@ -48,13 +52,26 @@
                         if ($result->num_rows > 0) {
                         ?>
                          <?php while ($row = $result->fetch_assoc()) : ?>
-                             <option data-id=<?php echo $row['listId']; ?>><?= $row['listName']; ?></option>
+                             <option data-name=<?php echo $row['listName']; ?> data-id=<?php echo $row['listId']; ?>><?= $row['listName']; ?></option>
                          <?php endwhile; ?>
-                     <?php  } else {
+                     <?php
+                        } else {
+                            echo "0 results";
+                        }
+                        $sql = "SELECT * FROM FamilyLists WHERE idUsers= '$email' AND NOT idCreator= '$email'";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                        ?>
+                         <?php while ($row = $result->fetch_assoc()) : ?>
+                             <option data-name=<?php echo $row['listName']; ?> data-id=<?php echo $row['listId']; ?>><?= $row['listName']; ?></option>
+                         <?php endwhile; ?>
+                     <?php } else {
                             echo "0 results";
                         }
                         ?>
                  </select>
+                 <!-- <input type="hidden" value="<?= $email ?>" class="user_email"> -->
+
                  <a href="#" id="listClick"><label style="cursor:pointer">Add a new list</label></a>
                  <div class="alert alert-danger" id="danger-alert">
                      <strong> You allready have a list with this name </strong>
@@ -62,7 +79,7 @@
                  <div class="row">
                      <div class="container py-2 col-12" id="addingNewListSection">
                          <form class="form-inline" id="addNewListName">
-                             <label for="nameOfNewList">A new list name:</label>
+                             <label class="welcome" for="nameOfNewList">A new list name:</label>
                              <input type="text" class="mx-3 mb-2 mr-sm-2" id="nameOfNewList" name="nameOfNewList" required>
                              <input type="submit" value="add" class="btn btn-primary mx-3 mx-md-2 mb-2" />
                              <a href="#" id="cancelAddList"><label style="cursor:pointer">Cancel</label></a>
@@ -71,6 +88,8 @@
                  </div>
                  <button type="button" data-toggle="modal" id="addNewProduct" data-target="#addingProductModal" class="btn btn-primary">
                      Add new product</button>
+                 <button type="button" data-toggle="modal" id="familylistClick" data-target="#sharelistModal" class="btn btn-primary">
+                     share the list</button>
              </div>
              <div class="col-12 col-sm-1" id="lottieHide">
                  <script src="https://unpkg.com/@lottiefiles/lottie-player@0.5.1/dist/lottie-player.js"></script>
@@ -102,7 +121,7 @@
                  <div class="row justify-content-center ">
                      <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_EMTsq1.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
                  </div>
-                 <h2 class="animate__animated animate__zoomInDown" style="  color:white;">No product in your list</h2>
+                 <h2 class="welcome animate__animated animate__zoomInDown ">No product in your list</h2>
              </div>
          </div>
      </div>
@@ -113,7 +132,7 @@
              <div class="modal-content">
                  <div class="modal-header">
                      <h5 class="modal-title">Logout</h5>
-                     <button  style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                      </button>
                  </div>
@@ -158,7 +177,7 @@
                      </button>
                  </div>
                  <div class="modal-body">
-                     <p>If you allready have a list,</p>
+                     <p>If you have a list with products,</p>
                      <p>Do you want to add all products from your chossen list to the current list?</p>
                      <select id="selectedOptionsModal" style=" width:250px; display: unset!important;">
                          <option value="" selected disabled hidden>Choose list</option>
@@ -189,7 +208,7 @@
              <div class="modal-content">
                  <div class="modal-header">
                      <h5 class="modal-title">Add product</h5>
-                     <button style="padding: 15px;"type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                      </button>
                  </div>
@@ -197,6 +216,9 @@
                      <form id="addProduct" autocomplete="off">
                          <div class="alert alert-danger" id="product-exist">
                              <strong> You allready have this product in your list</strong>
+                         </div>
+                         <div class="alert alert-danger" id="product-negative">
+                             <strong>Please add a product with amount bigger then 0</strong>
                          </div>
                          <div class="alert alert-success" id="product-created">
                              <strong> wonderful! You success to add product</strong>
@@ -222,6 +244,40 @@
                  <div class="modal-footer">
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                      <button type="button" id="addProductBtn" class="btn btn-primary">Add</button>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <!-- share list  -->
+     <div class="modal" id="sharelistModal" tabindex="-1" role="dialog" aria-labelledby="adding Product" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title">share list</h5>
+                     <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <div class="modal-body">
+                     <div class="alert alert-success" id="email-sent">
+                         <strong> we just send a email to your friend</strong>
+                     </div>
+                     <p>If you want to share this list you need to enter your friend email address. Your friend need first sign in to our system and then click the link we sent to his mail and automaticly he will see your list.</p>
+                     <form id="sharelist">
+                         <div class="row" style="padding-left:16px">
+                             <label for="email">Email address:</label>
+                             <input name="email" type="text" class=" mx-3 mb-2 mr-sm-2" id="email" style=" width:170px;" required>
+                         </div>
+                         <div class="row" style="padding-left:16px">
+                             <label for="userName">Your name:</label>
+                             <input name="userName" type="text" class=" mx-3 mb-2 mr-sm-2 " id="userName" style=" margin-left:2.3em!important; width:170px;" required>
+                         </div>
+                         <input type="submit" value="add" class="btn btn-primary mx-3 mx-md-0 mb-2 btnSubmit d-none" />
+                     </form>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     <button type="button" id="shareListBtn" class="btn btn-primary">share</button>
                  </div>
              </div>
          </div>

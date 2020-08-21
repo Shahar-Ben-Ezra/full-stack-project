@@ -3,7 +3,7 @@ require_once('../main/db.php');
 header('Content-Type: application/json');
 
 
-$confirmPassword = $_POST['confirmPassword'];
+$confirmPassword = password_hash($_POST['confirmPassword'], PASSWORD_DEFAULT);
 $email = $_POST['email'];
 $nickname = $_POST['nickname'];
 $phone = $_POST['phone'];

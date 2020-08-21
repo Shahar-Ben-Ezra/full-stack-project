@@ -9,6 +9,13 @@ $result = $conn->query($sql);
 if (!empty($result) && $result->num_rows > 0) {
     echo "false";
 } else {
-    echo 'true';
+    // calling also to family list db
+    $sql = "SELECT * FROM FamilyLists WHERE listName = '$listName' && idUsers = '$email'";
+    $result = $conn->query($sql);
+    if (!empty($result) && $result->num_rows > 0) {
+        echo "false";
+    } else {
+        echo 'true';
+    }
 }
 $conn->close();

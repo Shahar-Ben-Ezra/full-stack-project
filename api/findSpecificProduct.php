@@ -8,8 +8,8 @@ $sql = "SELECT * FROM productlist WHERE listId = '$id' && Productname = '$produc
 $result = $conn->query($sql);
 
 if (!empty($result) && $result->num_rows > 0) {
-    echo 'false';
-} else {
     echo 'true';
+} else {
+    echo 'false';
 }
 $conn->close();

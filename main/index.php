@@ -2,22 +2,34 @@
 session_start();
 $email = isset($_SESSION['email']);
 $cookieMail = isset($_COOKIE['email']);
+if ($email) {
+  $email = $_SESSION['email'];
+}
+if ($cookieMail) {
+  $cookieMail = $_COOKIE['email'];
+}
 $log = false;
 require_once "../parts/header.php";
 ?>
+
 <body>
   <h1 style="padding-top:100px ;" class="animate__animated animate__zoomInDown top">petek </h1>
   <h1 class="animate__animated animate__zoomInDown">now you are going to save money!!</h1>
   <input type="hidden" id="session_something" value="<?= $email || $cookieMail; ?>">
-  <?php if (isset($_GET["status"]) && $_GET["status"] == "fail") : ?>
-    <div class=" alert-danger" role="alert">
-      <?php $log = true; ?>
-    </div>
+
+  <?php if (isset($_GET["status"]) && $_GET["status"] === "fail") : ?>
+    <?php $log = 'fail'; ?>
   <?php endif; ?>
-  <?php if (isset($_GET["status"]) && $_GET["status"] == "showMsg") : ?>
-    <div class="alert-warning text-center" role="alert">
-      <?php $log = 'view'; ?>
-    </div>
+  <?php if (isset($_GET["status"]) && $_GET["status"] === "password") : ?>
+    <?php $log = 'password'; ?>
+  <?php endif; ?>
+  <?php if (isset($_GET["status"]) && $_GET["status"] === "showMsg") : ?>
+    <?php $log = 'view'; ?>
+  <?php endif; ?>
+  <?php if (isset($_GET["idCreator"]) && ($email || $cookieMail)) : ?>
+    <?php
+    $log = 'addingFamilyList';
+    ?>
   <?php endif; ?>
   <div class="container">
     <div class="row" style="padding-top: 50px; padding-bottom: 50px;">
@@ -58,7 +70,7 @@ require_once "../parts/header.php";
   <!-- The tabindex attribute explicitly defines the navigation order for focusable elements (typically links and form controls) within a page. It can also be used to define whether elements should be focusable or not. -->
   <div class="modal fade" id="loginModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-    <!-- : The document role tells assistive technologies with reading or browse modes to use the document mode to read the content contained within this element. -->
+      <!-- : The document role tells assistive technologies with reading or browse modes to use the document mode to read the content contained within this element. -->
       <div class="modal-content">
         <div>
           <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -94,7 +106,7 @@ require_once "../parts/header.php";
                   </label>
                 </div>
                 <div class="row" style="margin-left : 0px!important; margin-right: 0px!important;padding-left: 10px;">
-                  <p>Forget Password?</p>
+                  <p class="password" style="text-align:center;"><a href="" data-toggle="modal">Forget Password?</a></p>
                 </div>
               </div>
             </div>
@@ -121,6 +133,13 @@ require_once "../parts/header.php";
           <h2 class="modal-title" style="padding-left: 15px;padding-top: 15px;">Create an
             account</h2>
         </div>
+        <div class="alert alert-danger" id="user-exist">
+          <strong> You allready have acoount with this email go back and change the email </strong>
+        </div>
+        <div class="alert alert-success" id="email-sent">
+          <strong> wonderful! We send you an email to confirm your email address</strong>
+        </div>
+
         <div class="row justify-content-center">
           <lottie-player src="https://assets6.lottiefiles.com/packages/lf20_AXoQyR.json" background="transparent" speed="1" style="width: 200px; height: 200px;" loop autoplay></lottie-player>
         </div>
@@ -161,7 +180,43 @@ require_once "../parts/header.php";
       </div>
     </div>
   </div>
-
+  <!-- send a new password -->
+  <div class="modal fade" id="passwordMail" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div>
+          <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h2 class="modal-title" style="padding-left: 15px;padding-top: 15px;">Send a new password</h2>
+        </div>
+        <div class="alert alert-success" id="mail-password">
+          <strong> We send you your new password to the mail </strong>
+        </div>
+        <div class="row justify-content-center">
+          <lottie-player src="https://assets7.lottiefiles.com/private_files/lf30_GjhcdO.json" background="transparent" speed="1" style="width: 200px; height: 200px;" loop autoplay></lottie-player>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" id="MailPassword">
+            <div style="padding-left: 20px;">
+              <div class="row">
+                <div class="col-4">
+                  <label for="email" class="col-sm-4 control-label">Email:</label>
+                </div>
+                <div class="col-8 col-sm-5" style="padding-bottom: 20px;">
+                  <input type="text" id="emailPassword" name="email" class="form-control" placeholder="Enter email" required>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" value="Submit" class="btn btn-primary">save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- password -->
   <div class="modal fade" id="passwordPage" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -172,9 +227,6 @@ require_once "../parts/header.php";
           </button>
           <h2 class="modal-title" style="padding-left: 15px;padding-top: 15px;">Create an
             account</h2>
-        </div>
-        <div class="alert alert-danger" id="user-exist">
-          <strong> You allready have acoount with this email go back and change the email </strong>
         </div>
         <div class="alert alert-success" id="user-created">
           <strong> wonderful! You success to create an account! </strong>
@@ -203,7 +255,6 @@ require_once "../parts/header.php";
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-danger" id="backBtn" data-dismiss="modal">Back</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="submit" value="Submit" class="btn btn-primary">save</button>
             </div>
@@ -253,6 +304,25 @@ require_once "../parts/header.php";
       </div>
     </div>
   </div>
+  <!--adding family list failed modal -->
+  <div class="modal fade" id="addingFamilyListProblem" tabindex="-1" role="dialog">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">login problem</h5>
+          <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Adding share list failed you have allready have list with the same name</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Optional JavaScript -->
   <!-- jQuery first -->
@@ -274,8 +344,48 @@ require_once "../parts/header.php";
       $(document).ready(function() {
         <?php if ($log === 'view') : ?>
           $('#loginProblem').find('.modal-body').text(`You must be logged in in order to view the page`)
+          $("#loginProblem").modal('show');
         <?php endif; ?>
-        $("#loginProblem").modal('show');
+        <?php if ($log === 'fail') : ?>
+          $("#loginProblem").modal('show');
+        <?php endif; ?>
+        <?php if ($log === 'password') : ?>
+          $("#passwordPage").modal('show');
+        <?php endif; ?>
+        <?php if ($log === 'addingFamilyList') {
+          require_once("db.php");
+          $idCreator = htmlspecialchars($_GET["idCreator"]);
+          $listId = htmlspecialchars($_GET["listId"]);
+          $listName = htmlspecialchars($_GET["listName"]);
+          if ($email) {
+            $idUsers = $cookieMail;
+          } else {
+            $idUsers = $email;
+          }
+          if ($idCreator !== $idUsers) { // checking if the user is not the creator of the share list
+            $sql = "SELECT * FROM lists WHERE listName = '$listName' && email = '$email'"; // checking if the user dont have allready a list with the same name
+            $result = $conn->query($sql);
+            if (!($result && $result->num_rows > 0)) {
+              $sql = "SELECT * FROM FamilyLists WHERE idCreator= '$idCreator' && idUsers= '$idUsers'  && listId= '$listId'"; //checking if the user allredy added this share list
+              $result = $conn->query($sql);
+              if (!($result && $result->num_rows > 0)) {
+                $sql = "INSERT INTO `FamilyLists`(`listId`,`idCreator`,`idUsers`,`listName`)VALUES ('$listId','$idCreator','$idUsers','$listName')";
+                if ($conn->query($sql) === TRUE) {
+                  echo "";
+                } else {
+                  echo "didnt created ";
+                }
+                $conn->close();
+              } else {
+                echo "didnt created ";
+              }
+            } else {
+              $flag = true;
+              // $("#addingFamilyListProblem").modal('show');
+            }
+          }
+        }
+        ?>
 
       });
     <?php endif; ?>

@@ -6,19 +6,20 @@
 //     'iS4gmail.com' : '123421321321325',
 //     'iS5@gmail.com' : '123432135'
 // };
- 
-let user;
 $(document).ready(function () {
-    let x = $('#session_something').val();
+    let User = $('#session_something').val();
     if (!$('#session_something').val()) {
         $('#loginNav').show();
-        $("#logoutNav").css("visibility", "hidden")
-        $("#listsNav").css("visibility", "hidden")
-
+        $("#logoutNav").hide();
+        $("#listsNav").hide();
+        $("#shareListNav").hide();
+        $("#boughtProductsNav").hide();
     } else {
         $('#loginNav').hide();
-        $("#logoutNav").css("visibility", "visible")
-        $("#listsNav").css("visibility", "visible")
+        $("#logoutNav").show();
+        $("#listsNav").show();
+        $("#shareListNav").show();
+        $("#boughtProductsNav").show();
     }
 
     // clicking to create new account
@@ -26,7 +27,11 @@ $(document).ready(function () {
         $("#loginModal").modal('hide');
         $("#register").modal('show');
     });
-
+    // clicking to send new password
+    $(".password").click(function () {
+        $("#loginModal").modal('hide');
+        $("#passwordMail").modal('show');
+    });
     // logIn  validation
     $('form#logIn').validate({
         rules: {
@@ -68,6 +73,21 @@ $(document).ready(function () {
             $(element).closest('.form-group').removeClass('has-error');
         }
     });
+    // send a new passord validation
+    $('form#MailPassword').validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            }
+        },
+        highlight: function (element, erroClass) {
+            $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight: function (element, erroClass) {
+            $(element).closest('.form-group').removeClass('has-error');
+        }
+    });
 
     // password validation
     $('form#formPassword').validate({
@@ -96,6 +116,30 @@ $(document).ready(function () {
 
     });
 
+    /// submit new pssword form
+    $('form#MailPassword').submit(function (event) {
+        if ($(this).valid()) {
+            event.preventDefault();
+            const email = $('#emailPassword').val();
+            $.ajax({
+                url: "../api/sendEmail.php",
+                type: "POST",
+                data: ({ email, password: "true" }),
+                success: function (data) {
+                    $("#mail-password").fadeTo(3000, 500, function () {
+                        $(this).slideUp(2000);
+                        $("#passwordMail").modal('hide');
+                        $('#emailPassword').val("");
+
+                    });
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+
+            })
+        }
+    });
     // /// submit logIn form  
     // $('form#logIn').submit(function (event){
     //     event.preventDefault();
@@ -113,33 +157,37 @@ $(document).ready(function () {
             const email = $('#email').val();
             const nickname = $('#nickname').val();
             const phone = $('#phone').val();
-            user = {
-                email
-                , nickname
-                , phone
-            };
             $.ajax({
-                url: "../api/sendEmail.php",
-                type: "POST",
-                data: ({ email}),
+                url: "../api/findUser.php",
+                type: "GET",
+                data: ({ email }),
                 success: function (data) {
-                    console.log(data);
-                    clear();
-                    $("#user-created").fadeTo(3000, 500, function () {
-                        $(this).slideUp(1000, function () {
-                            $("#passwordPage").modal('hide');
+                    if (data) {
+                        $.ajax({
+                            url: "../api/sendEmail.php",
+                            type: "POST",
+                            data: ({ email, nickname, phone }),
+                            success: function () {
+                                clear();
+                                $("#email-sent").fadeTo(4000, 500, function () {
+                                    $(this).slideUp(2000);
+                                    $("#register").modal('hide');
+                                });
+                            },
+                        })
+                    }
+                    else {
+                        $("#user-exist").fadeTo(3000, 500, function () {
+                            $(this).slideUp(1000);
                         });
-                    });
+                    }
                 },
                 error: function (err) {
-                    $("#user-exist").fadeTo(3000, 500, function () {
-                        $(this).slideUp(1000);
-                    });
+                    console.log(err);
                 }
             })
+
         }
-            $("#register").modal('hide');
-            $("#passwordPage").modal('show');
     });
 
     /// submit password form
@@ -150,10 +198,14 @@ $(document).ready(function () {
             // if(!users[user.email]){
             //   users[user.email] =confirmPassword;
             // }
+            const urlParams = new URLSearchParams(window.location.search);
+            const phone = urlParams.get('phone');
+            const nickname = urlParams.get('nickname');
+            const email = urlParams.get('email');
             $.ajax({
                 url: "../api/addUser.php",
                 type: "POST",
-                data: ({ confirmPassword, email: user.email, nickname: user.nickname, phone: user.phone }),
+                data: ({ confirmPassword, email, nickname, phone }),
                 success: function (data) {
                     console.log(data);
                     clear();
@@ -164,25 +216,19 @@ $(document).ready(function () {
                     });
                 },
                 error: function (err) {
-                    $("#user-exist").fadeTo(3000, 500, function () {
-                        $(this).slideUp(1000);
-                    });
+                    console.log(err);
                 }
             })
         }
     });
-    function clear(){
+
+    function clear() {
         $('#email').val("");
         $('#nickname').val("");
         $('#phone').val("");
         $('#confirmPassword').val("");
         $('#registerpassword').val("");
     }
-    //back
-    $("#backBtn").on("click", function () {
-        $("#register").modal('show');
-    });
-
     /// logout
     $("#logountBtn").on("click", function () {
         location.href = 'logout.php';

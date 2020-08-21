@@ -1,0 +1,149 @@
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+body {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    min-height: 100%;
+    display: grid;
+}
+
+@media (max-width: 500px) {
+    #notPadding {
+        padding-left: 15px!important;
+        padding-bottom: 0px!important;
+    }
+}
+
+@media (min-width: 500px) {
+    .marginSpace {
+        padding-left: 40px!important;
+    }
+}
+
+@media (max-width: 900px) {
+    #lottieHide {
+        display: none;
+    }
+}
+
+tr {
+    color: white;
+}
+
+footer {
+    background-color: gainsboro;
+    width: 100%;
+}
+
+h1 {
+    color: #b48608;
+    font-family: 'Droid serif', serif;
+    font-size: 36px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 44px;
+    margin: 0 0 12px;
+    text-align: center;
+}
+
+.top {
+    color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+    font-size: 62px;
+    font-weight: 800;
+    line-height: 72px;
+    margin: 0 0 24px;
+    text-align: center;
+    text-transform: uppercase;
+    padding-top: 100px
+}
+
+.highlight {
+    background-color: cadetblue;
+}
+
+.error {
+    color: red;
+}
+
+.navbar {
+    width: 100%;
+    background-color: #555;
+    overflow: auto;
+}
+
+/* Navbar links */
+
+.navbar a {
+    float: left;
+    text-align: center;
+    padding: 12px;
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+/* Navbar links on mouse-over */
+
+.navbar a:hover {
+    background-color: #4CAF50;
+}
+
+/* Current/active navbar link */
+
+.active {
+    background-color: #4CAF50;
+}
+
+@media screen and (max-width: 500px) {
+    .navbar a {
+        float: none;
+        display: block;
+    }
+}
+
+#start {
+    margin-top: 60px;
+}
+
+#addingNewListSection {
+    display: none;
+}
+
+.alert {
+    display: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font: 16px Arial;
+}
+
+.autocomplete {
+    max-height: 80px;
+    overflow-y: auto;
+}
+
+.ui-autocomplete {
+    max-height: 80px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+    z-index: 5000 !important;
+}
+
+.dropdown-menu {
+    max-height: 146px;
+    overflow: scroll;
+    overflow-x: hidden;
+    margin-top: 0px;
+}

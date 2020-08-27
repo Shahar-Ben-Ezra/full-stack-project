@@ -8,12 +8,6 @@ $(document).ready(function () {
   $("#boughtProductsNav").show();
   $('#addNewProduct').attr("disabled", true);
   $('#familylistClick').attr("disabled", true);
-  $("#logountBtn").on("click", function () {
-    location.href = 'logout.php';
-  });
-  $("#ChangeBackground").click(function () {
-    $('body').toggleClass('dark');
-  });
 
   // clean the table and call the product from DB and set in the table
   function setTableWithAllProducts() {
@@ -80,8 +74,9 @@ $(document).ready(function () {
 
   //sending email to friend share list
   $("form#sharelist").submit(function (e) {
-    if ($(this).valid() && $(this).validator.form()) {
+    if ($(this).valid()) {
       e.preventDefault();
+      $('#shareListBtn').attr("disabled", true);
       $.ajax({
         url: "../api/findFamilyList.php",
         type: "GET",
@@ -89,11 +84,13 @@ $(document).ready(function () {
         success: function (data) {
           let familyEmail = $("#email").val().trim().toLowerCase();
           let name = $("#userName").val().trim().toLowerCase();
+          let email = data.idCreator;
           $.ajax({
             url: "../api/sendEmail.php",
             type: "POST",
-            data: ({ familyEmail, listId: SelectedListId, email: data.idCreator, name, listName: SelectedListName }),
+            data: ({ familyEmail, listId: SelectedListId, email, name, listName: SelectedListName, userEmail }),
             success: function (data) {
+              $('#shareListBtn').attr("disabled", false);
               $("#email-sent").fadeTo(3000, 500, function () {
                 $(this).slideUp(2000);
               });
@@ -120,7 +117,9 @@ $(document).ready(function () {
         $(this).slideUp(1000);
       });
     }
-    $("form#addProduct .btnSubmit").click();
+    else {
+      $("form#addProduct .btnSubmit").click();
+    }
   });
 
   //adding new product to the table and DB
@@ -149,8 +148,6 @@ $(document).ready(function () {
               $("#name-of-product").val("");
               $("#product-amount").val("");
               productsLength++;
-              console.log(data);
-              let id = data;
               setTableWithAllProducts();
             },
             error: function (err) {
@@ -182,7 +179,7 @@ $(document).ready(function () {
     $.ajax({
       url: "../api/updateProduct.php",
       type: "POST",
-      data: ({ id, statusProduct }),
+      data: ({ id, statusProduct, productname, email: userEmail }),
       success: function () {
         if (statusProduct === 'bought') {
           row.remove();
@@ -402,10 +399,12 @@ $(document).ready(function () {
     })
   };
 
+  // gmail validation
   jQuery.validator.addMethod("gmail", function (value, element) {
     return $("#email").val().trim().toLowerCase().includes("gmail");
   }, "Please enter a valid email address format name@gmail.com");
 
+  // sharelist validation
   $('form#sharelist').validate({
     rules: {
       email: {

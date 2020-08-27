@@ -71,26 +71,6 @@ if (is_null($email)) {
         </div>
     </div>
 
-    <!--log out modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logout" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Logout</h5>
-                    <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Do you want to logout?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="logountBtn" class="btn btn-primary">Yes</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <!--deleting product modal -->
     <div class="modal fade" id="deletingProductModal" tabindex="-1" role="dialog" aria-labelledby="deletingProduct" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

@@ -8,9 +8,7 @@ $(document).ready(function () {
     $("#boughtProductsNav").show();
     $('#addNewProduct').attr("disabled", true);
     $('#familylistClick').attr("disabled", true);
-    $("#logountBtn").on("click", function () {
-        location.href = 'logout.php';
-    });
+
     var userEmail = $('.user_email').val();
     let shareLength;
 

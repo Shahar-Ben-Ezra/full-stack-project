@@ -22,7 +22,14 @@ $mail->Password = "A13245768"; // Your Gmail login password or App Specific Pass
 * Message Configuration
 */
 $mail->setFrom('petekShahar2020@gmail.com', 'Petek: Register'); // Set the sender of the message.
-$mail->addAddress($_POST['email']); // Set the recipient of the message.
+if (isset($_POST['userEmail'])) {
+  if ($_POST['email'] !== $_POST['userEmail']) {
+    $mail->addAddress($_POST['email']);
+  }
+} else {
+  $mail->addAddress($_POST['email']); // Set the recipient of the message.
+}
+
 $mail->Subject = 'Welcome to Petek'; // The subject of the message.
 /*
 * Message Content - Choose simple text or HTML email
@@ -33,8 +40,10 @@ if (isset($_POST['password'])) {
   $mail->Subject = 'repassword'; // The subject of the message.
   $password = rand(10000, 1000000000000);
   $mail->Body = "Your new password is: $password  to user  $email";
+  $passwordEncryped = password_hash($password, PASSWORD_DEFAULT);
+
   $sql = "UPDATE `users` 
-  SET `password`='$password'  
+  SET `password`='$passwordEncryped'  
   WHERE email='$email'";
   if ($conn->query($sql) === TRUE && $mail->send()) {
     echo "Your message was sent successfully!";
@@ -48,7 +57,7 @@ if (isset($_POST['password'])) {
   $email = $_POST['email'];
   $listId = $_POST['listId'];
   $listName = $_POST['listName'];
-  $mail->Body = "Your friend $name send you invitation to his list market you need to create a new user  http://localhost/HW34_308074186/main/index.php?idCreator=$email&listId=$listId&listName=$listName";
+  $mail->Body = "Your friend $name send you invitation to his list market you need to login and then click the link  http://localhost/HW34_308074186/main/index.php?idCreator=$email&listId=$listId&listName=$listName";
   if ($mail->send()) {
     echo "Your message was sent successfully!";
   } else {

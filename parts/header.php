@@ -17,8 +17,6 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-
 </head>
 
 <header>
@@ -56,9 +54,33 @@
         </nav>
     </div>
 </header>
+<!--log out modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">logout</h5>
+                <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>do you want to logout?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="logountBtn" class="btn btn-primary">yes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function() {
         let color;
+        /// logout
+        $("#logountBtn").on("click", function() {
+            location.href = 'logout.php';
+        });
         if (localStorage.getItem("background") === 'black') {
             less.modifyVars({
                 '@background-color': '#000000!important',
@@ -68,14 +90,10 @@
                 '@border-color': '#FFFFFF!important',
                 '@images-color': '#FFFFFF!important',
                 '@footer-color': '#000000!important'
-
             });
             color = 'white';
         }
-
         $("#ChangeBackground").click(function() {
-
-
             if (color === 'white') {
                 less.modifyVars({
                     '@background-color': 'url(../images/photo-1500964757637-c85e8a162699.jpg)no-repeat center center fixed !important',
@@ -98,10 +116,8 @@
                     '@border-color': '#FFFFFF!important',
                     '@images-color': '#FFFFFF!important',
                     '@footer-color': '#000000!important'
-
                 });
                 localStorage.setItem("background", "black");
-
             }
         });
     });

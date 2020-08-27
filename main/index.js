@@ -8,7 +8,7 @@
 // };
 $(document).ready(function () {
     let User = $('#session_something').val();
-    if (!$('#session_something').val()) {
+    if ($('#session_something').val() === "0") {
         $('#loginNav').show();
         $("#logoutNav").hide();
         $("#listsNav").hide();
@@ -53,7 +53,7 @@ $(document).ready(function () {
     });
 
     // cusror -email input
-    $(document).on(' mouseenter mouseleave', '#email', function () {
+    $(document).on('mouseenter mouseleave', '#email', function () {
         $(this).toggleClass('highlight')
             .css('cursor', 'pointer');
     });
@@ -63,7 +63,8 @@ $(document).ready(function () {
         rules: {
             email: {
                 required: true,
-                email: true
+                email: true,
+                gmail: true
             }
         },
         highlight: function (element, erroClass) {
@@ -73,6 +74,12 @@ $(document).ready(function () {
             $(element).closest('.form-group').removeClass('has-error');
         }
     });
+
+    // gmail validation
+    jQuery.validator.addMethod("gmail", function (value, element) {
+        return $("#email").val().trim().toLowerCase().includes("gmail");
+    }, "Please enter a valid email address format name@gmail.com");
+
     // send a new passord validation
     $('form#MailPassword').validate({
         rules: {
@@ -120,12 +127,14 @@ $(document).ready(function () {
     $('form#MailPassword').submit(function (event) {
         if ($(this).valid()) {
             event.preventDefault();
+            $('#sendMail').attr("disabled", true);
             const email = $('#emailPassword').val();
             $.ajax({
                 url: "../api/sendEmail.php",
                 type: "POST",
                 data: ({ email, password: "true" }),
                 success: function (data) {
+                    $('#sendMail').attr("disabled", false);
                     $("#mail-password").fadeTo(3000, 500, function () {
                         $(this).slideUp(2000);
                         $("#passwordMail").modal('hide');
@@ -153,6 +162,7 @@ $(document).ready(function () {
     /// submit register form
     $('form#form-register').submit(function (event) {
         if ($(this).valid()) {
+            $('#saveAccount').attr("disabled", true);
             event.preventDefault();
             const email = $('#email').val();
             const nickname = $('#nickname').val();
@@ -168,8 +178,9 @@ $(document).ready(function () {
                             type: "POST",
                             data: ({ email, nickname, phone }),
                             success: function () {
+                                $('#saveAccount').attr("disabled", false);
                                 clear();
-                                $("#email-sent").fadeTo(4000, 500, function () {
+                                $("#email-sent").fadeTo(4500, 500, function () {
                                     $(this).slideUp(2000);
                                     $("#register").modal('hide');
                                 });
@@ -195,6 +206,7 @@ $(document).ready(function () {
         if ($(this).valid()) {
             event.preventDefault();
             const confirmPassword = $('#confirmPassword').val();
+            $('#formPassword').attr("disabled", true);
             // if(!users[user.email]){
             //   users[user.email] =confirmPassword;
             // }
@@ -208,6 +220,7 @@ $(document).ready(function () {
                 data: ({ confirmPassword, email, nickname, phone }),
                 success: function (data) {
                     console.log(data);
+                    $('#formPassword').attr("disabled", false);
                     clear();
                     $("#user-created").fadeTo(3000, 500, function () {
                         $(this).slideUp(1000, function () {
@@ -229,8 +242,4 @@ $(document).ready(function () {
         $('#confirmPassword').val("");
         $('#registerpassword').val("");
     }
-    /// logout
-    $("#logountBtn").on("click", function () {
-        location.href = 'logout.php';
-    });
 });

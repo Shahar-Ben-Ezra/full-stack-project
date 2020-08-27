@@ -1,12 +1,11 @@
 <?php
 session_start();
-$email = isset($_SESSION['email']);
-$cookieMail = isset($_COOKIE['email']);
-if ($email) {
+if (isset($_SESSION['email'])) {
   $email = $_SESSION['email'];
-}
-if ($cookieMail) {
-  $cookieMail = $_COOKIE['email'];
+} else if (isset($_COOKIE['email'])) {
+  $email = $_COOKIE['email'];
+} else {
+  $email = 0;
 }
 $log = false;
 require_once "../parts/header.php";
@@ -15,7 +14,7 @@ require_once "../parts/header.php";
 <body>
   <h1 style="padding-top:100px ;" class="animate__animated animate__zoomInDown top">petek </h1>
   <h1 class="animate__animated animate__zoomInDown">now you are going to save money!!</h1>
-  <input type="hidden" id="session_something" value="<?= $email || $cookieMail; ?>">
+  <input type="hidden" id="session_something" value="<?= $email ?>">
 
   <?php if (isset($_GET["status"]) && $_GET["status"] === "fail") : ?>
     <?php $log = 'fail'; ?>
@@ -26,7 +25,7 @@ require_once "../parts/header.php";
   <?php if (isset($_GET["status"]) && $_GET["status"] === "showMsg") : ?>
     <?php $log = 'view'; ?>
   <?php endif; ?>
-  <?php if (isset($_GET["idCreator"]) && ($email || $cookieMail)) : ?>
+  <?php if (isset($_GET["idCreator"]) && ($email)) : ?>
     <?php
     $log = 'addingFamilyList';
     ?>
@@ -210,7 +209,7 @@ require_once "../parts/header.php";
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" value="Submit" class="btn btn-primary">save</button>
+              <button type="submit" id="sendMail" value="Submit" class="btn btn-primary">save</button>
             </div>
           </form>
         </div>
@@ -256,35 +255,13 @@ require_once "../parts/header.php";
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" value="Submit" class="btn btn-primary">save</button>
+              <button type="submit" id="savePassword" value="Submit" class="btn btn-primary">save</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-
-  <!--log out modal -->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">logout</h5>
-          <button style="padding: 15px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>do you want to logout?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" id="logountBtn" class="btn btn-primary">yes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!--log failed modal -->
   <div class="modal fade" id="loginProblem" tabindex="-1" role="dialog">
     <div class="modal-dialog  modal-dialog-centered" role="document">
@@ -357,11 +334,7 @@ require_once "../parts/header.php";
           $idCreator = htmlspecialchars($_GET["idCreator"]);
           $listId = htmlspecialchars($_GET["listId"]);
           $listName = htmlspecialchars($_GET["listName"]);
-          if ($email) {
-            $idUsers = $cookieMail;
-          } else {
-            $idUsers = $email;
-          }
+          $idUsers = $email;
           if ($idCreator !== $idUsers) { // checking if the user is not the creator of the share list
             $sql = "SELECT * FROM lists WHERE listName = '$listName' && email = '$email'"; // checking if the user dont have allready a list with the same name
             $result = $conn->query($sql);
